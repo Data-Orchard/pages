@@ -632,7 +632,7 @@
 		var legend = L.control({position: 'bottomright'});
 		legend.onAdd = function (map) {
 			var div = L.DomUtil.create('div', 'info legend');
-			div.innerHTML = "<h3>Legend</h3> <table style=\"width:100%\"><tr><th>Colour</th><th style=\"text-align:right\">Risk level</th></tr><tr><td style=\"background-color:\#fef0d9\"></td><td style=\"text-align:right\">1</td></tr><tr><td style=\"background-color:\#fdcc8a\"></td><td style=\"text-align:right\">2</td></tr><tr><td style=\"background-color:\#fc8d59\"></td><td style=\"text-align:right\">3</td></tr><tr><td style=\"background-color:\#e34a33\"></td><td style=\"text-align:right\">4</td></tr><tr><td style=\"background-color:\#b11e33\"></td><td style=\"text-align:right\">5</td></tr><tr><td style=\"background-color:\#808285\"></td><td style=\"text-align:right\">Places that help</td></tr><tr><td colspan=\"2\">Bigger is higher risk</td></tr><table>";
+			div.innerHTML = "<h3>Legend</h3> <table style=\"width:100%\"><tr><th>Colour</th><th style=\"text-align:right\">Risk level</th></tr><tr><td style=\"background-color:\#fef0d9\"></td><td style=\"text-align:right\">1</td></tr><tr><td style=\"background-color:\#fdcc8a\"></td><td style=\"text-align:right\">2</td></tr><tr><td style=\"background-color:\#fc8d59\"></td><td style=\"text-align:right\">3</td></tr><tr><td style=\"background-color:\#e34a33\"></td><td style=\"text-align:right\">4</td></tr><tr><td style=\"background-color:\#b11e33\"></td><td style=\"text-align:right\">5</td></tr><tr><td><span class=\"dot\"></span></td><td style=\"text-align:right\">Places that help</td></tr><tr><td colspan=\"2\">Bigger is higher risk</td></tr><table>";
     		return div;
 		};
 		legend.addTo(map);
