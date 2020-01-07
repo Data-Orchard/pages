@@ -24,6 +24,17 @@ th {
 .info h2 {
 	margin: 0 0 5px;
 	color: #777;
+    line-height:normal;
 }
 .leaflet-container {
 	background: #fff;
+}
+
+.titleimage {
+  border: 1px;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100px;
+    float:right;
+    opacity: 0.5;
+}
