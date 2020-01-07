@@ -637,9 +637,11 @@
 		};
 		legend.addTo(map);
 	var baseMaps = {
-		'OSM Standard': basemap_0
+        "OverallDeprivation": exp_OverallDeprivationJSON,"BenefitClaimants": exp_BenefitClaimantsJSON,"FuelPoverty": exp_FuelPovertyJSON,"NoCarHouseholds": exp_NoCarHouseholdsJSON,"Year6Obesity": exp_Year6ObesityJSON,"LoneParentHouseholds": exp_LoneParentHouseholdsJSON,"LonePensionerHouseholds": exp_LonePensionerHouseholdsJSON,"OverallMedianScore": exp_OverallMedianScoreJSON
 	};
-		L.control.layers(baseMaps,{"Locationsofplacesthathelp": exp_LocationsofplacesthathelpJSON,"OverallDeprivation": exp_OverallDeprivationJSON,"BenefitClaimants": exp_BenefitClaimantsJSON,"FuelPoverty": exp_FuelPovertyJSON,"NoCarHouseholds": exp_NoCarHouseholdsJSON,"Year6Obesity": exp_Year6ObesityJSON,"LoneParentHouseholds": exp_LoneParentHouseholdsJSON,"LonePensionerHouseholds": exp_LonePensionerHouseholdsJSON,"OverallMedianScore": exp_OverallMedianScoreJSON},{collapsed:false}).addTo(map);
+   var overlayMaps = {"Locationsofplacesthathelp": exp_LocationsofplacesthathelpJSON,'OSM Standard': basemap_0};
+            
+		L.control.layers(baseMaps,overlayMaps,{collapsed:false}).addTo(map);
 		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
 	</script>
 </body>
