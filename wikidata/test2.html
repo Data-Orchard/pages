@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <title>wikidata on leaflet</title>
-  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-hash@0.2.1/leaflet-hash.js"></script>
-  <style>
-    .wikidata {
+    <head>
+        <title>A Leaflet map!</title>
+        <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7.3/leaflet.css" />
+        <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7.3/leaflet.js"></script>
+        <style>
+          #map{ position:absolute;top:0;left:0;bottom:0;right:0; }
+          .wikidata {
       white-space: nowrap;
       width: auto;
       height: auto;
@@ -21,33 +22,25 @@
       background: black;
       color: orange;
     }
-  </style>
-</head>
+        </style>
+      </head>
+    <body>
+        <div id="map"></div>
 
-<body>
-  <div id="map" style="position:absolute;top:0;left:0;bottom:0;right:0;"></div>
-  <script>
-    var map = L.map("map", L.extend({
-      zoom: 12,
-      center: [52.2110,-3.8123]    
-    }, L.Hash.parseHash(location.hash)));
-
-L.tileLayer("http://openstreetmap.cymru/osm_tiles/{z}/{x}/{y}.png", {
-        attribution: "<a href='http://maps.gsi.go.jp/development/ichiran.html'>Mapio Cymru</a>"
-      }).addTo(map);
- #  L.control.layers({
-  #    "Mapio Cymru": L.tileLayer("http://openstreetmap.cymru/osm_tiles/{z}/{x}/{y}.png", {
-  #      attribution: "<a href='http://maps.gsi.go.jp/development/ichiran.html'>Mapio Cymru</a>"
-  #    }),
+        <script>
       
-  #    "OpenStreetMap": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
- #       attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
-      })
- #   }).addTo(map);
+        // initialize the map
+        var map = L.map('map').setView([52.2110,-3.8123], 12)
+      
+        // load a tile layer
+        L.tileLayer('http://openstreetmap.cymru/osm_tiles/{z}/{x}/{y}.png',
+          {
+            attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+            maxZoom: 17,
+            minZoom: 9
+          }).addTo(map);
 
-    L.hash(map);
-
-    var group = L.layerGroup().addTo(map);
+var group = L.layerGroup().addTo(map);
     var lang = "cy";
     if (location.search.match(/^\?([a-zA-Z_]+)$/)) lang = RegExp.$1;
 
@@ -85,7 +78,8 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "${lang}". }
         });
       });
     }).fire("moveend");
-  </script>
-</body>
 
+ 
+        </script>
+    </body>
 </html>
