@@ -47,9 +47,9 @@ var group = L.layerGroup().addTo(map);
     map.on("moveend", function() {
       var bounds = map.getBounds();
       var sparql =
-        `SELECT ?item ?placeLabel ?location WHERE {
+      `SELECT ?place ?placeLabel ?location WHERE {
 SERVICE wikibase:box {
-  ?item wdt:P625 ?location.
+ ?place wdt:P625 ?location.
  bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral.
  bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral.
 }
