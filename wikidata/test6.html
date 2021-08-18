@@ -117,7 +117,7 @@ SERVICE wikibase:box {
  minus { ?place wdt:P31 wd:Q54471221 }   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       transport.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -159,7 +159,7 @@ SERVICE wikibase:box {
  minus {?place  wdt:P31 wd:Q64578911 .} 
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       medical.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -200,7 +200,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       toilets.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -241,7 +241,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       GLAM.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -283,7 +283,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       historic.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -324,7 +324,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
       prehistoric.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
@@ -359,7 +359,7 @@ SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
-  }
+  } 
 
   { ?place wdt:P31/wdt:P279* wd:Q3395377 } 
 UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
@@ -369,7 +369,7 @@ UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
 
       hills.clearLayers();
@@ -405,7 +405,7 @@ SERVICE wikibase:box {
     ?place wdt:P625 ?location  .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
-  }
+  } 
 
  ?place wdt:P31 wd:Q40080 .
  ?place wdt:P31 ?type  .
@@ -413,7 +413,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
 
       beaches.clearLayers();
@@ -449,7 +449,7 @@ SERVICE wikibase:box {
     ?place wdt:P625 ?location  .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
-  }
+  } 
 
  ?place wdt:P31 wd:Q350723 .
  ?place wdt:P31 ?type  .
@@ -457,7 +457,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
 
       country_parks.clearLayers();
@@ -501,7 +501,7 @@ SERVICE wikibase:box {
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
-}
+} LIMIT 2000
 `;
 
       lakes.clearLayers();
