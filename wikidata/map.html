@@ -355,8 +355,12 @@ SERVICE wikibase:box {
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   }
-  FILTER EXISTS { ?place wdt:P31 wd:Q813966 }
+  FILTER EXISTS { ?place wdt:P31/wdt:P279* wd:Q1030034 }
   ?place wdt:P31 ?type .
+?type wdt:P279* wd:Q1030034 .
+  
+minus { ?place wdt:P576 ?end } .            
+minus { ?place wdt:P582 ?end1 } . 
  
   
  
@@ -397,8 +401,11 @@ SERVICE wikibase:box {
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   }
-  FILTER EXISTS { ?place wdt:P31 wd:Q813966 }
-  ?place wdt:P31 ?type .
+  { ?place wdt:P1459 ?cadw. }
+UNION { ?place wdt:P4658 ?coflein }
+  UNION { ?place wdt:P4641 ?chapels }
+
+ ?place wdt:P31 ?type  .
  
   
  
@@ -438,8 +445,10 @@ SERVICE wikibase:box {
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   }
-  FILTER EXISTS { ?place wdt:P31 wd:Q813966 }
-  ?place wdt:P31 ?type .
+  { ?place wdt:P31/wdt:P279* wd:Q3395377 } 
+UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
+
+ ?place wdt:P31 ?type  .
  
   
  
@@ -480,12 +489,11 @@ SERVICE wikibase:box {
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   } 
-
-  { ?place wdt:P31/wdt:P279* wd:Q3395377 } 
-UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
+  { ?place wdt:P31 wd:Q8502 .}
+  UNION { ?place wdt:P31 wd:Q54050 .}
 
  ?place wdt:P31 ?type  .
-
+  ?place wdt:P2044 ?elev .
   
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
@@ -658,14 +666,13 @@ SERVICE wikibase:box {
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   }
-
+       
+       
   { ?a p:P1448/prov:wasDerivedFrom/pr:P248 wd:Q107011559 }
        ?a wdt:P1448 ?placelabel .
               BIND( LANG(?placelabel) AS ?language). 
 
 FILTER(STRSTARTS(?language, "cy")).
- 
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
 } LIMIT 2000
 `;
 
@@ -698,7 +705,7 @@ var overlays = {
    "Trafnidiaeth": transport,
    "Meddygol": medical,
    "Toiledau": toilets,
-   "Oriel": GLAM,
+   "Diwylliant": GLAM,
    "Safleoedd Hanesyddol": historic,
    "Safleoedd Cynhanesyddol": prehistoric,
    "Bryniau a Mynyddoedd": hills,
