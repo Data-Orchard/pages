@@ -659,23 +659,23 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?typeLabel ?location 
+      var sparql_1 =`SELECT ?aa ?location ?placelabel
 WHERE {
 SERVICE wikibase:box {
-    ?place wdt:P625 ?location  .
+    ?aa wdt:P625 ?location  .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   }
-       
-       
-  { ?a p:P1448/prov:wasDerivedFrom/pr:P248 wd:Q107011559 }
-       ?a wdt:P1448 ?placelabel .
+  { ?aa p:P1448/prov:wasDerivedFrom/pr:P248 wd:Q107011559 }
+       ?aa wdt:P1448 ?placelabel .
               BIND( LANG(?placelabel) AS ?language). 
 
 FILTER(STRSTARTS(?language, "cy")).
+    
+   SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
 } LIMIT 2000
 `;
-
+//DO NOT COPY THIS CODE IT HAS IMPORTANT SYNTAX DIFFERENCES
       officialnames.clearLayers();
       fetch("https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparql_1), {
         "headers": {
@@ -688,8 +688,8 @@ FILTER(STRSTARTS(?language, "cy")).
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
+            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placelabel.value + "</a></span>";
+            if (x.placelabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
             L.marker([lat, lon],{icon: officialnamemk}).bindPopup(html).openPopup().addTo(officialnames);
           }
         });
