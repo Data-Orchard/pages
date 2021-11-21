@@ -249,7 +249,10 @@ L.control.layers(baseLayers, overlays, {collapsed:false}).addTo(map);
 		marker: L.circleMarker([0,0],{radius:30}),
 		autoCollapse: true,
 		autoType: false,
-		minLength: 2
+		zoom: 14,	
+    textPlaceholder: 'Chwilio...',
+    minLength: 2
+    
 	}) );
 
 
