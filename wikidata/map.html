@@ -184,7 +184,7 @@ var schools = L.layerGroup()
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 = `SELECT ?placeLabel ?location?typeLabel  WHERE {
+      var sparql_1 = `SELECT ?placeLabel ?location ?typeLabel  WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -209,9 +209,13 @@ minus { ?place wdt:P31 wd:Q1244442 } .
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: schoolsmk}).bindPopup(html).openPopup().addTo(schools);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: schoolsmk}).bindPopup(html).openPopup().addTo(schools);
+           
           }
+          } 
         });
       });
     }).fire("moveend");
@@ -252,8 +256,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: transportmk}).bindPopup(html).openPopup().addTo(transport);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: transportmk}).bindPopup(html).openPopup().addTo(transport);
+           
+          }
           }
         });
       });
@@ -294,8 +302,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: medicalmk}).bindPopup(html).openPopup().addTo(medical);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: medicalmk}).bindPopup(html).openPopup().addTo(medical);
+           
+          }
           }
         });
       });
@@ -335,8 +347,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: toiletsmk}).bindPopup(html).openPopup().addTo(toilets);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: toiletsmk}).bindPopup(html).openPopup().addTo(toilets);
+           
+          }
           }
         });
       });
@@ -349,7 +365,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
+      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -375,14 +391,22 @@ minus { ?place wdt:P582 ?end1 } .
         "method": "GET",
         "mode": "cors"
       }).then(a => a.json()).then(a => {
+
         a.results.bindings.forEach(x => {
+          
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: GLAMmk}).bindPopup(html).openPopup().addTo(GLAM);
+           if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: GLAMmk}).bindPopup(html).openPopup().addTo(GLAM);
+           
           }
+
+          }
+
         });
       });
     }).fire("moveend");    
@@ -425,9 +449,13 @@ UNION { ?place wdt:P4658 ?coflein }
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: historicmk}).bindPopup(html).openPopup().addTo(historic);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: historicmk}).bindPopup(html).openPopup().addTo(historic);
+           
           }
+          }else{console.log("Historic Trip")}
         });
       });
     }).fire("moveend");        
@@ -468,8 +496,12 @@ UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: prehistoricmk}).bindPopup(html).openPopup().addTo(prehistoric);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: prehistoricmk}).bindPopup(html).openPopup().addTo(prehistoric);
+           
+          }
           }
         });
       });
@@ -513,8 +545,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: hillsmk}).bindPopup(html).openPopup().addTo(hills);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: hillsmk}).bindPopup(html).openPopup().addTo(hills);
+           
+          }
           }
         });
       });
@@ -557,8 +593,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: beachesmk}).bindPopup(html).openPopup().addTo(beaches);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: beachesmk}).bindPopup(html).openPopup().addTo(beaches);
+           
+          }
           }
         });
       });
@@ -601,8 +641,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: cparkmk}).bindPopup(html).openPopup().addTo(country_parks);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: country_parksmk}).bindPopup(html).openPopup().addTo(country_parks);
+           
+          }
           }
         });
       });
@@ -645,8 +689,12 @@ SERVICE wikibase:box {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
-            if (x.placeLabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: lakesmk}).bindPopup(html).openPopup().addTo(lakes);
+            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: lakesmk}).bindPopup(html).openPopup().addTo(lakes);
+           
+          }
           }
         });
       });
@@ -689,8 +737,12 @@ FILTER(STRSTARTS(?language, "cy")).
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
             var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placelabel.value + "</a></span>";
-            if (x.placelabel.value.match(/^Q[0-9]+$/)) markerLayer.removeLayer(x);
-            L.marker([lat, lon],{icon: officialnamemk}).bindPopup(html).openPopup().addTo(officialnames);
+            if (x.placelabel.value.match(/^Q[0-9]+$/)) {
+             //Do not add the point to the layer
+} else {
+           L.marker([lat, lon],{icon: officialnamemk}).bindPopup(html).openPopup().addTo(officialnames);
+           
+          }
           }
         });
       });
