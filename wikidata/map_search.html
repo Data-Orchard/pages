@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7.3/leaflet.css" />
         <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7.3/leaflet.js"></script>
         <script src="src/leaflet-search.js"></script>
+        <script src="src/leaflet-hash.js"></script>
 
 
         <link rel="stylesheet" href="src/leaflet-search.css" />
@@ -235,7 +236,7 @@ var overlays = {
 
 
 };
-
+var hash = new L.Hash(map);
 
 L.control.layers(baseLayers, overlays, {collapsed:false}).addTo(map);
 
