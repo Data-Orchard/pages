@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-tilelayer-wmts.js"></script>
+        <script src="data/FoodInsecurityRiskLSOAs_1.js"></script>
+        <script>
+var basemap_0 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          {
+            attribution: 'A project by <a href="https://dataorchard.org.uk">Data Orchard CIC</a> and Worthing Food Poverty Alliance supported by <a href="https://lesaldenfoundation.org.uk">Les Alden Foundation</a>',
+            maxZoom: 17,
+            minZoom: 9
+          })
+
+
+
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[50.797485832784844,-0.45654393730110615],[50.84610274480042,-0.32295118215252844]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('Built with <a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a> | Contains data from <a href="https://openstreetmap.org">OpenStreetMap Contributors</a> licensed under Open Database License, "ODbL" 1.0 & Office for National Statistics licensed under the Open Government Licence v.3.0');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_OpenStreetMapsRoads_0');
+        map.getPane('pane_OpenStreetMapsRoads_0').style.zIndex = 400;
+        map.addLayer(basemap_0);
+        function pop_FoodInsecurityRiskLSOAs_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>LSOA: </strong><br />' + (feature.properties['LSOA11NM'] !== null ? autolinker.link(feature.properties['LSOA11NM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Food Risk Score:</th>\
+                        <td>' + (feature.properties['FoodRisk'] !== null ? autolinker.link(feature.properties['FoodRisk'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_FoodInsecurityRiskLSOAs_1_0(feature) {
+            if (feature.properties['FoodRisk'] >= 1.000000 && feature.properties['FoodRisk'] <= 1.800000 ) {
+                return {
+                pane: 'pane_FoodInsecurityRiskLSOAs_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.5)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,229,217,0.5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['FoodRisk'] >= 1.800000 && feature.properties['FoodRisk'] <= 2.600000 ) {
+                return {
+                pane: 'pane_FoodInsecurityRiskLSOAs_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.5)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,174,145,0.5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['FoodRisk'] >= 2.600000 && feature.properties['FoodRisk'] <= 3.600000 ) {
+                return {
+                pane: 'pane_FoodInsecurityRiskLSOAs_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.5)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,106,74,0.5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['FoodRisk'] >= 3.600000 && feature.properties['FoodRisk'] <= 4.600000 ) {
+                return {
+                pane: 'pane_FoodInsecurityRiskLSOAs_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.5)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,45,38,0.5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['FoodRisk'] >= 4.600000 && feature.properties['FoodRisk'] <= 5.000000 ) {
+                return {
+                pane: 'pane_FoodInsecurityRiskLSOAs_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.5)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(165,15,21,0.5)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_FoodInsecurityRiskLSOAs_1');
+        map.getPane('pane_FoodInsecurityRiskLSOAs_1').style.zIndex = 401;
+        map.getPane('pane_FoodInsecurityRiskLSOAs_1').style['mix-blend-mode'] = 'normal';
+        var layer_FoodInsecurityRiskLSOAs_1 = new L.geoJson(json_FoodInsecurityRiskLSOAs_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_FoodInsecurityRiskLSOAs_1',
+            layerName: 'layer_FoodInsecurityRiskLSOAs_1',
+            pane: 'pane_FoodInsecurityRiskLSOAs_1',
+            onEachFeature: pop_FoodInsecurityRiskLSOAs_1,
+            style: style_FoodInsecurityRiskLSOAs_1_0,
+        });
+        bounds_group.addLayer(layer_FoodInsecurityRiskLSOAs_1);
+        map.addLayer(layer_FoodInsecurityRiskLSOAs_1);
+   
+        var overlayMaps = {
+    "Food Risk Score": layer_FoodInsecurityRiskLSOAs_1
+};
+
+        var baseMaps = {    "OpenStreetMap": basemap_0};
+        L.control.layers(baseMaps,overlayMaps).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
