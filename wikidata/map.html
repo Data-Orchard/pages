@@ -213,7 +213,7 @@ minus { ?place wdt:P31 wd:Q1244442 } .
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a> Wikidata:";
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
