@@ -626,22 +626,22 @@
 			return this._div;
 		};
 		title.update = function () {
-			this._div.innerHTML = '<h2>Food Poverty risk in Herefordshire</h2>Risk Factors of food poverty'
+			this._div.innerHTML = '<img class="titleimage" src="https://data-orchard.github.io/pages/assets/Burgundy-leaf-icon.png"> <h2>Food Poverty risk in Herefordshire</h2><p>Risk Factors of food poverty</p>'
 		};
 		title.addTo(map);
 		var legend = L.control({position: 'bottomright'});
 		legend.onAdd = function (map) {
 			var div = L.DomUtil.create('div', 'info legend');
-			div.innerHTML = "<h3>Legend</h3> <table style=\"width:100%\"><tr><th>Colour</th><th style=\"text-align:right\">Risk level</th></tr><tr><td style=\"background-color:\#fef0d9\"></td><td style=\"text-align:right\">1</td></tr><tr><td style=\"background-color:\#fdcc8a\"></td><td style=\"text-align:right\">2</td></tr><tr><td style=\"background-color:\#fc8d59\"></td><td style=\"text-align:right\">3</td></tr><tr><td style=\"background-color:\#e34a33\"></td><td style=\"text-align:right\">4</td></tr><tr><td style=\"background-color:\#b11e33\"></td><td style=\"text-align:right\">5</td></tr><tr><td style=\"background-color:\#808285\"></td><td style=\"text-align:right\">Places that help</td></tr><tr><td colspan=\"2\">Bigger is higher risk</td></tr><table>";
+			div.innerHTML = "<h3>Legend</h3> <table style=\"width:100%\"><tr><th>Colour</th><th style=\"text-align:right\">Risk level</th></tr><tr><td style=\"background-color:\#fef0d9\"></td><td style=\"text-align:right\">1</td></tr><tr><td style=\"background-color:\#fdcc8a\"></td><td style=\"text-align:right\">2</td></tr><tr><td style=\"background-color:\#fc8d59\"></td><td style=\"text-align:right\">3</td></tr><tr><td style=\"background-color:\#e34a33\"></td><td style=\"text-align:right\">4</td></tr><tr><td style=\"background-color:\#b11e33\"></td><td style=\"text-align:right\">5</td></tr><tr><td><span class=\"dot\"></span></td><td style=\"text-align:right\">Places that help</td></tr><tr><td colspan=\"2\">Bigger is higher risk</td></tr><table>";
     		return div;
 		};
 		legend.addTo(map);
 	var baseMaps = {
-		'OSM Standard': basemap_0;
- 
-
+        "OverallDeprivation": exp_OverallDeprivationJSON,"BenefitClaimants": exp_BenefitClaimantsJSON,"FuelPoverty": exp_FuelPovertyJSON,"NoCarHouseholds": exp_NoCarHouseholdsJSON,"Year6Obesity": exp_Year6ObesityJSON,"LoneParentHouseholds": exp_LoneParentHouseholdsJSON,"LonePensionerHouseholds": exp_LonePensionerHouseholdsJSON,"OverallMedianScore": exp_OverallMedianScoreJSON
 	};
-		L.control.layers(baseMaps,{"Locationsofplacesthathelp": exp_LocationsofplacesthathelpJSON,"OverallDeprivation": exp_OverallDeprivationJSON,"BenefitClaimants": exp_BenefitClaimantsJSON,"FuelPoverty": exp_FuelPovertyJSON,"NoCarHouseholds": exp_NoCarHouseholdsJSON,"Year6Obesity": exp_Year6ObesityJSON,"LoneParentHouseholds": exp_LoneParentHouseholdsJSON,"LonePensionerHouseholds": exp_LonePensionerHouseholdsJSON,"OverallMedianScore": exp_OverallMedianScoreJSON},{collapsed:false}).addTo(map);
+   var overlayMaps = {"Locationsofplacesthathelp": exp_LocationsofplacesthathelpJSON,'OSM Standard': basemap_0};
+            
+		L.control.layers(baseMaps,overlayMaps,{collapsed:false}).addTo(map);
 		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
 	</script>
 </body>
