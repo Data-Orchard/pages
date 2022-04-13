@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
+## Data Orchard CIC pages repo
 
-You can use the [editor on GitHub](https://github.com/Data-Orchard/pages/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Data Orchard CIC is a social enterprise with a mission of supporting organisations to use better data for greater impact.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+We use this repo to share some projects, often while they are in development.
 
-### Markdown
+- [prototype map to overlay wikidata items with Welsh labels on a Welsh language map](https://data-orchard.github.io/pages/wikidata/map.html#12/52.2110/-3.8123)
+- [map of food poverty risk in Herefordshire](https://data-orchard.github.io/pages/hfds-food-poverty/index.html)
+- [map of food poverty risk in Worthing](https://github.com/Data-Orchard/pages/tree/master/worthing-food-poverty)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Data-Orchard/pages/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Any questions or suggestions: [get in touch](https://www.dataorchard.org.uk/contact).
