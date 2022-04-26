@@ -188,7 +188,9 @@ var schools = L.layerGroup()
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 = `SELECT ?placeLabel ?location ?typeLabel  WHERE {
+      var test = bounds;
+      console.log(test);
+      var sparql_1 = `SELECT ?placeLabel ?location ?typeLabel ?place WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -212,7 +214,7 @@ minus { ?place wdt:P31 wd:Q1244442 } .
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a> Wikidata:";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -232,7 +234,7 @@ minus { ?place wdt:P31 wd:Q1244442 } .
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 = `SELECT ?placeLabel ?location ?typeLabel ?operator ?operatorLabel WHERE {
+      var sparql_1 = `SELECT ?place ?placeLabel ?location ?typeLabel ?operator ?operatorLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -259,7 +261,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -279,7 +281,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel ?operator ?operatorLabel WHERE {
+      var sparql_1 =`SELECT ?place ?placeLabel ?location ?typeLabel ?operator ?operatorLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -305,7 +307,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -324,7 +326,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
+      var sparql_1 =`SELECT ?place ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -350,7 +352,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -369,7 +371,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel WHERE {
+      var sparql_1 =`SELECT ?place ?placeLabel ?location ?typeLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -401,7 +403,7 @@ minus { ?place wdt:P582 ?end1 } .
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
            if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -423,7 +425,7 @@ minus { ?place wdt:P582 ?end1 } .
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
+      var sparql_1 =`SELECT ?place ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -452,7 +454,7 @@ UNION { ?place wdt:P4658 ?coflein }
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -471,7 +473,7 @@ UNION { ?place wdt:P4658 ?coflein }
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
+      var sparql_1 =`SELECT ?place ?placeLabel ?location ?typeLabel ?locationLabel WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
@@ -499,7 +501,7 @@ UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -518,7 +520,7 @@ UNION { ?place wdt:P31/wdt:P279* wd:Q10521078 } .
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?typeLabel ?location
+      var sparql_1 =`SELECT ?place ?placeLabel ?typeLabel ?location
 WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location .
@@ -548,7 +550,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -567,7 +569,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?typeLabel ?location 
+      var sparql_1 =`SELECT ?place ?placeLabel ?typeLabel ?location 
 WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location  .
@@ -596,7 +598,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -615,18 +617,24 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?typeLabel ?location 
+      var sparql_1 =`SELECT ?item ?placeLabel ?typeLabel ?coord 
 WHERE {
 SERVICE wikibase:box {
-    ?place wdt:P625 ?location  .
+    ?place wdt:P625 ?coord  .
     bd:serviceParam wikibase:cornerWest "Point(${bounds.getWest()} ${bounds.getNorth()})"^^geo:wktLiteral .
     bd:serviceParam wikibase:cornerEast "Point(${bounds.getEast()} ${bounds.getSouth()})"^^geo:wktLiteral .
   } 
-
- ?place wdt:P31 wd:Q350723 .
- ?place wdt:P31 ?type  .
+  ?item wdt:P131* wd:Q25 .  
+?item wdt:P31 wd:Q350723 .
 
   
+  ?item wdt:P625 ?coord .
+
+   
+  { ?item wdt:P31 ?type  .
+             ?type rdfs:label ?type_label . #manual way of getting label
+            FILTER (lang(?type_label) = "cy") #manual way of getting label  
+            }
  
     SERVICE wikibase:label { bd:serviceParam wikibase:language "cy". }
 } LIMIT 2000
@@ -644,7 +652,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -663,7 +671,7 @@ SERVICE wikibase:box {
 
     map.on("moveend", function() {
       var bounds = map.getBounds();
-      var sparql_1 =`SELECT ?placeLabel ?typeLabel ?location 
+      var sparql_1 =`SELECT ?place ?placeLabel ?typeLabel ?location 
 WHERE {
 SERVICE wikibase:box {
     ?place wdt:P625 ?location  .
@@ -692,7 +700,7 @@ SERVICE wikibase:box {
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placeLabel.value + "</a></span>";
+            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -740,7 +748,7 @@ FILTER(STRSTARTS(?language, "cy")).
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<span class='link_format'> <a href=\"https://www.openstreetmap.org/edit#map=16/" + lat + "/" + lon + "\">" + x.placelabel.value + "</a></span>";
+            var html = "<h3>" + x.placelabel.value + "</h3><span class='link_format'><a href=\"https://www.openstreetmap.org/#map=16/"+ lat + "/" + lon +"\">Gweld ar OpenStreetMap</a> <br /> <a href=\"" + x.aa.value + "\"> Gweld ar Wikidata </a></span>";
             if (x.placelabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -768,7 +776,7 @@ var overlays = {
    "Safleoedd Cynhanesyddol": prehistoric,
    "Bryniau a Mynyddoedd": hills,
    "Traethau": beaches,
-   "Parciau Gwledig": country_parks,
+   //"Parciau Gwledig": country_parks,
    "Llynnoedd a Chronfeydd Dŵr": lakes,
    "Enwau Lleoedd Safonol Cymru": officialnames
 
@@ -798,6 +806,6 @@ L.control.layers(baseLayers, overlays, {collapsed:false}).addTo(map);
 
 
         </script>
-
+        
     </body>
 </html>
