@@ -131,13 +131,13 @@ In this report we look at the results from this year's Impact Analysis. We also 
 
 ### What we did
 
-We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free Individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisational version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
+We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free Individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisational version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment, where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
 
 We asked about users' experience of taking a data maturity assessment and any benefits they experienced or actions they took as a result of taking an assessment. We received 70 complete responses in total.
 
 ### Key Findings
 
--   People, commonly, take a data maturity assessment at least in part to learn more about data maturity. When they have taken a data maturity assessment they are likely to agree that they have learned about data maturity
+-   People, commonly, take a data maturity assessment - at least in part - to learn more about data maturity. When they have taken a data maturity assessment, they are likely to agree that they have learned about data maturity
 
 -   Taking a data maturity assessment prompts sharing and discussions about data within organisations
 
@@ -171,9 +171,9 @@ In order to test the theory of change, we asked people who had taken a data matu
 
 ### Who was invited?
 
-We sent out 707 invites to people who had taken our Data Maturity Assessment Tool between 6th November 2020 and 31st March 2022. 21 of these invites were sent to people who were the project leads when their organisation undertook a paid-for Organisational data maturity assessment with us. 686 were sent to users of the free Individual version. In total, we received 70 complete responses.
+We sent out 707 invites to people who had used our Data Maturity Assessment Tool between 6th November 2020 and 31st March 2022. 21 of these invites were sent to people who were the project leads when their organisation undertook a paid-for Organisational data maturity assessment with us. 686 were sent to users of the free Individual version. In total, we received 70 complete responses.
 
-```{r, echo = FALSE, fig.cap = "Figure 1: Table showing response rate to the 2022 impact survey.", fig.alt = "Table showing response rate to the 2022 impact survey. Individual users: 686 invites sent, 63 responses, 9.2% response rate. Organisational users: 21 invites sent, 7 responses, 33.3% response rate. Total: 707 invites sent, 70 responses, 9.9% response rate."}
+```{r, echo = FALSE, fig.cap = "Figure 1: Table showing invites and response rate to the 2022 impact survey for Individual and Organisational version users.", fig.alt = "Table showing response rate to the 2022 impact survey. Individual users: 686 invites sent, 63 responses, 9.2% response rate. Organisational users: 21 invites sent, 7 responses, 33.3% response rate. Total: 707 invites sent, 70 responses, 9.9% response rate."}
 responses <- data.frame(row.names = c("Invites Sent", "Responses", "Response Rate"),
            "Individual" = c("686", "63", "9.2%"),
            "Organisational" = c("21", "7", "33.3%"),
@@ -1098,7 +1098,7 @@ org_dat <- dat22 %>%
   filter(orgs == "1")
 ```
 
-We thought it would be interesting to look at those who undertook a paid-for Organisational assessment separately. These are not-for-profit organisations that conducted an organisation-wide assessment with Data Orchard. Often, but not always, this is alongside other support in getting better with data. Seven organisations who used the paid-for Organisational version of the data maturity assessment responded to our most recent survey. As the sample size is so small this an exploratory look at the findings.
+We thought it would be interesting to look at those who undertook a paid-for Organisational assessment separately. These are not-for-profit organisations that conducted an organisation-wide assessment with Data Orchard. Often, but not always, this is alongside other support in getting better with data. Seven organisations who used the paid-for Organisational version of the data maturity assessment responded to our most recent survey. As the sample size is so small, this an exploratory look at the findings.
 
 ### Motivations
 
@@ -1171,7 +1171,7 @@ webshot(url = "plots/mot_org_plot.html", file = "plots/mot_org_plot.png", delay 
 
 #### Benefits
 
-Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version report experiencing more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
+Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version of the tool report experiencing more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
 
 -   They are more invested in data maturity (taken the time and invested resources to do an organisational assessment)
 
@@ -1265,7 +1265,7 @@ webshot(url = "plots/ben_org_dat_plot.html", file = "plots/ben_org_dat_plot.png"
 
 #### Actions
 
-All user of the Organisational version who answered this question *shared the results within their organisation*. Six of seven users (86%) went on to *discuss changes with colleagues*, *secure leadership support* and *use them to guide plans for a data strategy*. No-one took *no action*. 
+All Organisational version users who answered this question *shared the results within their organisation*. Six of seven users (86%) went on to *discuss changes with colleagues*, *secure leadership support* and *use them to guide plans for a data strategy*. No-one took *no action*. 
 
 ```{r, include = FALSE}
 
@@ -1577,7 +1577,7 @@ Although only a few sought funding (internally or externally), it is of note tha
 
 Many of the patterns we see in users of the Organisational version of the of the Data Maturity Assessment Tool are similar to that of users of the free Individual version. There is a high motivation to learn about data maturity and the most common actions are sharing results and discussing data maturity with colleagues.
 
-Importantly, most users of Organisational version experienced all the benefits we asked about at least moderately. Furthermore, many more benefits were experienced *'extensively'*, compared to that of free Individual version users.
+Importantly, most users of Organisational version experienced all the benefits we asked about at least moderately. Furthermore, many more benefits were experienced *'extensively'*, compared to free Individual version users.
 
 The fact that no respondents said they took *no action* after taking the assessment is support for the impact of our tool as a driver of change. Around 40% implemented a data strategy plan with limited achievements (as mentioned previously, this is possibly because there has not been sufficient time to see the fruits of their data strategy implementations).
 
@@ -1920,9 +1920,9 @@ knitr::include_graphics("images/DO_framework.JPG")
 
 We have designed a self-assessment tool that organisations can use to evaluate how they score for each of the seven key themes, and therefore their overall data maturity score. The full assessment takes around 20 minutes. There are three versions of the assessment tool available:
 
--   Individual - Anyone can use this version to take an assessment for free. Data maturity score is based on that individuals responses.
+-   Individual - Anyone can use this version to take an assessment for free. Data maturity score is based on that individual's responses.
 
--   Organisation - Using this version of the tool, multiple people within an organisation take the assessment and the results are compiled into an organisational report. This gives a more accurate data maturity score.
+-   Organisational - Using this version of the tool, multiple people within an organisation take the assessment and the results are compiled into an organisational report. This gives a more accurate data maturity score.
 
 -   Cohort - Multiple organisations can use this version to take the assessment at the same time. Ideal for data consultants, support providers, networks, & membership organisations wanting to advance organisations' data maturity collectively.
 
