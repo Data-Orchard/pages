@@ -1,0 +1,2020 @@
+---
+title: "Data Maturity Assessment Impact Report 2022"
+author: "Ben Proctor and Libby Harkins"
+date: "June 2022"
+documentclass: report
+classoption: portrait
+papersize: a4
+linestretch: 1.1
+header-includes:
+- \usepackage{titling}
+- \pretitle{\begin{flushleft}\LARGE\
+- \scalebox{.5}{\includegraphics{logo.png}}\vskip 0.5em}
+- \posttitle{\end{flushleft}}
+- \usepackage{float}
+- \usepackage[margin=10pt,font=small,textfont=it,labelfont=bf, labelsep=colon]{caption}
+  [2022/02/20]
+- \preauthor{\begin{flushleft}}
+- \postauthor{\end{flushleft}}
+- \predate{\begin{flushleft}\large}
+- \postdate{\par\end{flushleft}}
+- \usepackage{xcolor}
+- \usepackage{sectsty}
+- \chapterfont{\color{blue}}  % sets colour of chapters
+- \allsectionsfont{\mdseries\bshape}
+- \allsectionsfont{\color[HTML]{B11E33}}  % sets colour of sections
+- \usepackage{arev}
+- \usepackage[T1]{fontenc}
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    css: "style.css"
+    toc_depth: 3
+    fig_crop: FALSE
+    fig_caption: no
+    df_print: paged
+    includes:
+      before_body: before.html
+  word_document:
+    toc: yes
+    toc_depth: 3
+  pdf_document:
+    fig_caption: yes
+    keep_tex: no 
+    toc: true
+    toc_depth: 3 
+    latex_engine: tinytex
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, include = FALSE}
+# LOAD DEPENDENCIES
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library(plotly)
+library(webshot2)
+```
+
+```{r, include = FALSE}
+# LOAD DATASETS
+
+# csv Mapping
+csvMapping <- read_xlsx("data/csvMapping.xlsx")
+
+# 2022
+# manually added in Empty colum (E) and tagged empty responses. Manually added in orgs column (k)
+dat22 <- read_csv("data/All_Responses_Data_2022.csv")
+dat22 = dat22[-1,]
+
+#rename columns and tag year
+colnames(dat22) <- csvMapping$QRef
+dat22<- dat22 %>% mutate('year' = '22') %>%
+  filter(is.na(`Empty`))
+
+# load orgs 
+
+orgs22 <- read_csv("data/orgs_emails_2022.csv") %>%
+  pull()
+
+# tag organisation in results dataframe
+
+for(x in 1:nrow(dat22)){
+  if(dat22$`Email Address`[x] %in% orgs22){
+  dat22$orgs[x] <- "1"
+  }
+}
+
+# 2021
+# manually adDed in Empty colum (E) and tagged empty responses. Manually added in orgs column (k)
+dat21 <- read_csv("data/All_Responses_Data_2021.csv")
+dat21 = dat21[-1,]
+
+#rename columns and tag year
+colnames(dat21) <- csvMapping$QRef
+dat21<- dat21 %>% mutate('year' = '21') %>%
+  filter(is.na(`Empty`))
+
+# load orgs 
+
+orgs21 <- read_xlsx("data/orgs_emails_2021.xlsx") %>%
+  pull()
+
+# tag organisation in results dataframe
+
+for(x in 1:nrow(dat21)){
+  if(dat21$`Email Address`[x] %in% orgs21){
+  dat21$orgs[x] <- "1"
+  }
+}
+
+
+# load in colours
+colour_scheme <- c("#B11E33", "#EE7623","#64A6A7","#F04E4B","#9CCB44","#EF6C6C","#808285","#E43A8E", "#196769", "#566e2a")
+```
+
+# Executive Summary
+
+The results of Data Orchard's 2022 Impact Analysis of the Data Maturity Assessment Tool were similar to the 2020 findings: The tool is regularly used for learning about data maturity, and taking an assessment is often a catalyst for discussion with colleagues which can lead to further action. 
+
+In this report we look at the results from this year's Impact Analysis. We also compare this year's results to the 2020 findings and reflect on what this means. 
+
+### What we did
+
+We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisation version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
+
+We asked about users' experience of taking a data maturity assessment and any benefits they experienced or actions they took as a result of taking an assessment. We received 70 complete responses in total.
+
+### Key Findings
+
+-   People, commonly, take a data maturity assessment at least in part to learn more about data maturity. When they have taken a data maturity assessment they are likely to agree that they have learned about data maturity
+
+-   Taking a data maturity assessment prompts sharing and discussions about data within organisations
+
+-   Efforts to secure financial resources to implement improvements following a data maturity assessment are almost always successful
+
+-   Around 40% of organisations go on to implement a data strategy after taking an assessment
+
+-   Overall findings are similar to our previous impact survey results from 2020
+
+-   Organisational Data Maturity Assessments appear to have more extensive benefits than Individual Data Maturity Assessments
+
+
+
+# Introduction
+
+Data maturity is the organisational journey towards improvement and increased capability in using data. Data Orchard CIC has been researching data maturity since 2015 and has developed both a Data Maturity Framework and Data Maturity Assessment Tool.
+
+Our theory of change suggests that users experience these key problems:
+
+-   a lack of knowledge about data maturity (i.e. what good and great looks like)
+
+-   a sense of needing to get better but not knowing where to start
+
+-   struggling to engage leaders and colleagues in discussions about data or driving improvements
+
+Our theory of change predicts that by taking a data maturity assessment, the user experiences immediate benefits that bring about tangible actions. These actions lead to results that increase data maturity and provide long-term rewards and benefits. See the appendix for more detail about our Data Maturity Framework and theory of change.
+
+In order to test the theory of change, we asked people who had taken a data maturity assessment about their experience and outcomes (changes in attitude, behaviour, skills and knowledge).
+
+# Approach
+
+### Who was invited?
+
+We sent out 707 invites to people who had taken our Data Maturity Assessment Tool between 6th November 2020 and 31st March 2022. 21 of these invites were sent to people who were the project leads when their organisation undertook a paid-for Organisational data maturity assessment with us. 686 were sent to users of the free Individual version. In total, we received 70 complete responses.
+
+```{r, echo = FALSE, fig.cap = "Figure 1: Table showing response rate to the 2022 impact survey.", fig.alt = "Table showing response rate to the 2022 impact survey. Individual users: 686 invites sent, 63 responses, 9.2% response rate. Organisational users: 21 invites sent, 7 responses, 33.3% response rate. Total: 707 invites sent, 70 responses, 9.9% response rate."}
+responses <- data.frame(row.names = c("Invites Sent", "Responses", "Response Rate"),
+           "Individual" = c("686", "63", "9.2%"),
+           "Organisational" = c("21", "7", "33.3%"),
+           "Total" = c("707", "70", "9.9%"))
+
+knitr::kable(responses, 
+             caption = 'Figure 1: Table showing invites and response rate for individual and organisational users')
+
+
+```
+
+The overall response rate is 9.9%. The response rate is higher for users of the paid-for Organisational version (33.3%) than users of the free Individual version (9.2%). This response rate is lower than for our previous 2020 impact survey (which was 20% overall).
+
+Respondents who skipped a whole question were excluded from analysis for that question. However, if they partially answered a question they were included with *'unanswered'* under the section they did not complete. 
+
+### What did we ask them?
+
+We repeated the same online survey used in [our previous Impact Evaluation.](https://www.dataorchard.org.uk/data-maturity-assessment-impact-report-jan-21) The survey asked respondents:
+
+-   about the context in which they took the data maturity assessment and their motivations for taking an assessment
+
+-   about their overall impression of the Data Maturity Assessment Tool
+
+-   any immediate benefits they received
+
+-   actions they took as a result of using the Data Maturity Assessment Tool
+
+We also asked if they had implemented a data strategy, and any achievements they gained from doing so. We then asked if they had applied for, or secured, resources to implement improvements.
+
+### Profile of Respondents
+
+We asked respondents in what capacity they took the data maturity assessment. The breakdown is shown in Figure 2.
+
+```{r, include = FALSE}
+# make figure legend column
+
+dem.dat <- dat22 %>%
+  mutate(demo = case_when(orgs == "1" ~ "Paid-for organisational version",
+                          Empty == "1" ~ "Didn’t answer past first question",
+                          is.na(orgs) & is.na(Empty) ~ "Free individual version")
+         ) %>%
+  select(`Capacity`, `demo`) %>%
+  group_by(`Capacity`, `demo`) %>%
+  summarise(n = n()) %>%
+  mutate(Capacity = case_when(Capacity == "For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker)" ~ "Network/Membership/Cohort",
+                             Capacity == "For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)" ~ "For client organisation/s in the not-for-profit sector",
+                             Capacity == "For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)" ~ "For the not-for-profit organisation I work for",
+                             Capacity == "Other (please specify)" ~ 'Other'))
+
+n_dem <- sum(dem.dat$n)
+
+
+p <- ggplot(dem.dat, aes(fill = factor(demo, levels = c("Didn’t answer past first question",
+                                                   "Paid-for organisational version",
+                                                   "Free individual version"
+                                                   )), 
+                 y = n, 
+                 x = factor(`Capacity`,
+                           levels = c(
+                             "Other",
+                             "Network/Membership/Cohort", 
+                             "For client organisation/s in the not-for-profit sector",
+                             "For the not-for-profit organisation I work for")),
+                 text = paste(
+                  "<b>", dem.dat$Capacity, "</b>",
+                  "<br>",
+                  dem.dat$demo, "=", dem.dat$n)
+                   )) +
+  geom_bar(position="stack", stat="identity") +
+  scale_x_discrete(labels = vapply(c("For client organisation/s in the not-for-profit sector", 
+                                     "For the not-for-profit organisation I work for",
+                                     "Other",
+                                     "Network/Membership/Cohort")
+    , str_wrap, character(1), width = 30)) +
+  guides(fill=guide_legend(title=" ")) +
+  xlab(" ") +
+  ylab("Number of Respondents") +
+ # scale_colour_manual(values = colour_scheme) +
+  theme_bw(base_size = 13) +
+  #scale_fill_discrete(breaks = c("Free users", "Organisational DMA", "Didn’t answer past first question")) +
+  scale_fill_manual(values = c("#64A6A7", "#9CCB44", "#808285"), 
+                    guide = guide_legend(reverse = TRUE),
+                    breaks =c("Free individual version", "Paid-for organisational version", "Didn’t answer past first question")) +
+   coord_flip() +
+  geom_text(aes(label = n),
+            size = 3
+            ,position = position_stack(
+              vjust = 0.5
+              ,reverse = FALSE))
+
+dem_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed",
+                       x = '-0.12',
+                       y = '-0.17'),
+         margin = list(l = 0, r = 0,
+          b = 20, t = 100,
+          pad = 0),
+         xaxis = list(title = list(standoff = 0))) %>%
+  add_annotations(
+    text = paste("Total number of respondents = ", n_dem),
+    x = 1,
+    y = 1.1,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  ) %>%
+  layout(title = list(text = 'In what capacity did you take the data maturity assessment?',
+                      font = list(size = 20)),
+          xaxis = list(titlefont = list(size = 14), title = "Number of Respondents")) %>%
+  config(displayModeBar = FALSE)
+```
+
+```{r eval=knitr::is_html_output(), echo=FALSE, fig.alt="Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the individual version, 7 paid-for organisational version users. For client organisations in the not-for-profit sector: 5 free individual version users. 7 other users of the free individual version.", fig.cap='Figure 2: Number of people completing impact survey by user type', fig.height=5, warning=FALSE, out.width='100%'}
+dem_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5.5, fig.cap = 'Figure 2: Number of people completing impact survey by user type', fig.alt = "Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the individual version, 7 paid-for organisational version users. For client organisations in the not-for-profit sector: 5 free individual version users. 7 other users of the free individual version.  "}
+htmlwidgets::saveWidget(widget = dem_plot, file = "plots/dem_plot.html")
+webshot(url = "plots/dem_plot.html", file = "plots/dem_plot.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+# Results: 2022
+
+## Usefulness
+
+All but 2 respondents said they found the tool at least *'somewhat useful'*. 67% of all respondents said they found the Data Maturity Assessment Tool *very* or *extremely useful*. No one said they found the Data Maturity Assessment Tool *not at all useful*. Of the two respondents who found the tool not so useful:
+
+-   one said that they needed more support to fill it out and lack of engagement from leaders led to no action
+
+-   the other said that they found the questions irrelevant and hard to answer
+
+```{r, include = FALSE}
+# make dataframe of usefulness scores 
+use_all <- dat22 %>%
+  select(Capacity, NFP_useful, SP_useful, mem_useful) %>%
+  # combine all useful scores into one column
+  mutate(Useful = case_when(!is.na(NFP_useful) ~ NFP_useful,
+                          !is.na(SP_useful) ~ SP_useful,
+                          !is.na(mem_useful) ~ mem_useful)
+  ) %>%
+  filter(!is.na(Useful)) %>%
+  select(Capacity, Useful) %>% 
+  group_by(Capacity, `Useful`) %>%
+  summarise(total = n()) %>%
+  mutate(Label = paste0(round(total / sum(total) * 100, 0), "%"))
+
+# labels for n of each group
+dd <- use_all %>%
+  group_by(Capacity) %>%
+  summarise(n = sum(total))
+
+
+p <- ggplot(use_all, aes(x = factor(Capacity, levels = c("Other (please specify)",
+                                                    "For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)",
+                                                    "For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)"
+                                                    )),
+                    y = total,
+                    fill = factor(`Useful`, levels = c("Not at all useful",
+                                                       "Not so useful",
+                                                       "Somewhat useful",
+                                                       "Very useful",
+                                                       "Extremely useful"
+                                                       )),
+                    text = paste("<b>", Useful, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", Label, ")"))) +
+  geom_bar(position="fill", stat="identity") + 
+  xlab(" ") +
+  ylab(" ") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+
+  scale_x_discrete(labels = vapply(c("For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)" = "Support Provider", 
+                                     "For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)" = "Not-for-profit organisation",
+                                     "Other (please specify)" = "Other",
+                                     "For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker)" = "Network/Membership/Cohort"), str_wrap, character(1), width = 28)
+                   ) +
+
+  theme_bw(base_size = 13) +
+  coord_flip(clip = 'off') +
+  theme(plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 1)) +
+  scale_fill_manual(values = c("#F04E4B", "#9CCB44", "#64a6a7", "#808285"), 
+                    breaks = c("Extremely useful", "Very useful", "Somewhat useful", 
+                               "Not so useful", "Not at all useful") 
+  ) 
+  
+usefulness_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(margin=list(l=0,r=70,b=10,t=100, pad = 6),
+         legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed", 
+                        x = '-0.12',
+                       y = '-0.17')) %>% 
+         add_annotations(yref = 'paper', xref = 'paper', y = 0.5, x = 1.08, text = paste("n=", dd$n[1]), showarrow = FALSE, font = list(size = 12)) %>%
+  add_annotations(yref = 'paper', xref = 'paper', y = 0.85, x = 1.08, text = paste("n=", dd$n[2]), showarrow = FALSE, font = list(size = 12)) %>%
+         add_annotations(yref = 'paper', xref = 'paper', y = 0.15, x = 1.08, text = paste("n=", dd$n[3]), showarrow = FALSE, font = list(size = 12)) %>%
+    layout(title = list(text = paste0('How useful did you find the Data Maturity Assessment Tool?',
+                                    '<br>',
+                                    '<sup>',
+                                     'Most users found the tool at least very useful', '</sup>'),
+                        font = list(size = 20)))
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4.5, fig.cap = 'Figure 3: How useful respondents found the data maturity assessment by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
+usefulness_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5, fig.cap = 'Figure 3: How useful respondents found the data maturity assessment by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
+htmlwidgets::saveWidget(widget = usefulness_plot, file = "plots/usefulness_plot.html")
+webshot(url = "plots/usefulness_plot.html", file = "plots/usefulness_plot.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+## Benchmarking
+
+The benchmarking feature held some importance to most users. It was mostly *'somewhat important'*, suggesting that it isn't the driving reason for using the tool. This is supported by the fact that few respondents agreed that comparing their data maturity score to others in the sector was a motivating factor in taking the assessment (see Motivation section).
+
+```{r, include = FALSE}
+# make dataframe of benchmark ratings
+bench_all <- dat22 %>%
+  select(Capacity, NFP_bench, SP_bench, mem_bench) %>%
+  mutate(Benchmark = case_when(!is.na(NFP_bench) ~ NFP_bench,
+                            !is.na(SP_bench) ~ SP_bench,
+                            !is.na(mem_bench) ~ mem_bench)
+  ) %>%
+  filter(!is.na(Benchmark )) %>%
+  select(Capacity, Benchmark ) %>% 
+  group_by(Capacity, `Benchmark`) %>%
+  summarise(total = n()) %>%
+ mutate(Label = paste0(round(total / sum(total) * 100, 0), "%"))
+
+# labels for n of each group
+dd <- bench_all %>%
+  group_by(Capacity) %>%
+  summarise(n = sum(total))
+
+p<- ggplot(bench_all, aes(x = factor(Capacity, levels = c("Other (please specify)",
+                                                    "For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)",
+                                                    "For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)"
+)),
+y = total,
+fill = factor(`Benchmark`, levels = c("Not at all important",
+                                   "Not so important",
+                                   "Somewhat important",
+                                   "Very important",
+                                   "Extremely important"
+                                      )),
+text = paste("<b>", Benchmark, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", Label, ")"))) +
+  geom_bar(position="fill", stat="identity") + 
+  xlab(" ") +
+  ylab("") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = vapply(c("For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)" = "Support Provider", 
+                                     "For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)" = "Not-for-profit organisation",
+                                     "Other (please specify)" = "Other",
+                                     "For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker)" = "Network/Membership/Cohort")
+                                   
+                                   , str_wrap, character(1), width = 28)) +
+  theme_bw(base_size = 13) +
+  scale_fill_manual(values = c("#F04E4B", "#9CCB44", "#64a6a7", "#808285"), 
+                    # guide = guide_legend(reverse = TRUE),
+                    breaks = c("Extremely important", "Very important", "Somewhat important", 
+                               "Not so important", "Not at all important")
+  ) +
+  coord_flip()
+
+
+benchmark_plot <- ggplotly(p, tooltip = 'text') %>%
+   layout(margin=list(l=0,r=70,b=10,t=100, pad = 0),
+         legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed",
+                        x = '-0.12',
+                       y = '-0.17'
+                       )) %>% 
+         add_annotations(yref = 'paper', xref = 'paper', y = 0.5, x = 1.08, text = paste("n=", dd$n[1]), showarrow = FALSE, font = list(size = 12)) %>%
+  add_annotations(yref = 'paper', xref = 'paper', y = 0.85, x = 1.08, text = paste("n=", dd$n[2]), showarrow = FALSE, font = list(size = 12)) %>%
+         add_annotations(yref = 'paper', xref = 'paper', y = 0.15, x = 1.08, text = paste("n=", dd$n[3]), showarrow = FALSE, font = list(size = 12)) %>%
+    layout(title = list(text = paste0('How important was the benchmarking feature of the tool?',
+                                    '<br>',
+                                    '<sup>',
+                                     "Most people found the benchmarking feature 'somewhat important'", '</sup>'),
+                        font = list(size = 20)))
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4.5, fig.cap = 'Figure 4: Importance of the benchmarking feature by user type', fig.alt = "Stacked bar chart showing importance of benchmarking feature by user type. Not-for-profit user: total = 57. Extremely important = 12%, very important = 37%, somewhat important = 46%, not so important = 5%. Support providers: total = 5.  Extremely important =40%, very important = 60%. Other, total = 8. Extremely important = 25%, very important = 25%, somewhat important = 50%."}
+benchmark_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5, fig.cap = 'Figure 4: Importance of the benchmarking feature by user type', fig.alt = "Stacked bar chart showing importance of benchmarking feature by user type. Not-for-profit user: total = 57. Extremely important = 12%, very important = 37%, somewhat important = 46%, not so important = 5%. Support providers: total = 5.  Extremely important =40%, very important = 60%. Other, total = 8. Extremely important = 25%, very important = 25%, somewhat important = 50%."}
+htmlwidgets::saveWidget(widget = benchmark_plot, file = "plots/benchmark_plot.html")
+webshot(url = "plots/benchmark_plot.html", file = "plots/benchmark_plot.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+### Expectation vs Reality
+
+Most users from not-for-profit organisations expected their organisation to be either *average* or *worse than average* (76.7%). People generally aren't taking the assessment because they think they are doing better than others. We see this again when only 4% of not-for-profit users of the free Individual version cite *'thought we might be doing quite well compared to others and wanted to check'* as a motivation for taking the assessment (see Motivation section). Most organisations compared to others in a way the user expected (62.5%).
+
+```{r, include = FALSE}
+expect <- dat22 %>%
+  filter(Capacity == 
+           'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)') %>%
+  select(NFP_expect) %>%
+  group_by(NFP_expect) %>%
+  summarise(n = n())
+
+comp <- dat22 %>%
+  filter(Capacity == 
+           'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)') %>%
+  select(NFP_comp) %>%
+  group_by(NFP_comp) %>%
+  summarise(n = n())
+  
+```
+
+## Likelihood to Recommend
+
+Of 70 people who answered this question, 68% are likely or very likely to recommend Data Orchard's Data Maturity Assessment Tool. Only 2% are unlikely to do so.
+
+```{r, include = FALSE}
+rec_all <- dat22 %>%
+  filter(!is.na(recommend)) %>%
+  group_by(recommend) %>%
+  summarise(n = n()) %>%
+  mutate(Label = paste0(round(n / sum(n) * 100, 0), "%")) 
+rec_all <- rec_all[rowSums(is.na(rec_all)) != ncol(rec_all), ]
+rec_all <- rec_all %>% mutate(include = 'y')
+n_recc <- sum(rec_all$n)
+
+p <- ggplot(rec_all, aes(x = include, y = n, fill = factor(recommend, 
+                                                 c("Very unlikely",
+                                                   "Unlikely",
+                                                   "Neither likely nor unlikely",
+                                                   "Somewhat likely",
+                                                   "Likely",
+                                                   "Very likely")),
+            text = paste(
+              "<b>", recommend, "</b>", 
+              "<br>",
+              "count = ", n,
+              "<br>",
+              "(", Label, ")"
+            ))) +
+  geom_bar(position="fill", stat="identity") +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = c(" ")) +
+  xlab(" ") +
+  ylab(" ") +
+  scale_fill_manual(values = colour_scheme,
+                    breaks = c("Very likely",
+                                          "Likely",
+                                          "Somewhat likely",
+                                          "Neither likely nor unlikely",
+                                          "Unlikely",
+                                          "Very unlikely")) +
+  theme_bw(base_size = 13) +
+  guides(fill=guide_legend(title = " ")) +
+  coord_flip()
+
+recc_plot <- ggplotly(p, tooltip = 'text') %>%
+   layout(legend = list(orientation = "h",
+                        font = list(size = 12),
+                       traceorder = "reversed",
+                       x = '-0.12',
+                       y = '-0.17'),
+          margin = list(t = 150, r = 0, l = 0, b = 70),
+          title = list(text = paste(str_wrap("How likely is it that you would recommend the Data Maturity Assessment Tool to another not-for-profit organisation?", 65)),
+                       font = list(size = 20)))%>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_recc),
+    x = 1,
+    y = 1.15,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4, fig.cap = 'Figure 5: How likely users of the Data Maturity Assessment Tool are to recommend it to others', fig.alt = "Single stacked bar chart showing rating how likely people are to recommend the data maturity assessment tool to another not-for-profit organisation. Total respondents = 70. Very likely = 41%, likely = 27%, somewhat likely = 16%, neither likely nor unlikely =13%, unlikely – 1%, very unlikely = 1%."}
+recc_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4.5, fig.cap = 'Figure 5: How likely users of the Data Maturity Assessment Tool are to recommend it to others', fig.alt = "Single stacked bar chart showing rating how likely people are to recommend the data maturity assessment tool to another not-for-profit organisation. Total respondents = 70. Very likely = 41%, likely = 27%, somewhat likely = 16%, neither likely nor unlikely =13%, unlikely – 1%, very unlikely = 1%."}
+htmlwidgets::saveWidget(widget = recc_plot, file = "plots/recc_plot.html")
+webshot(url = "plots/recc_plot.html", file = "plots/recc_plot.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+We asked those who would recommend the tool to give some details about how they have benefited and why they would recommend it. These are some of their responses:
+
+<center>
+
+*"It's accessible, comprehensive and viable for NfPs financially"*
+
+*"It has given us an externally validated way of looking at our data maturity and the results have enabled us to start discussions on a data strategy. We have a good idea of where we need to go and where to prioritise as a result of carrying out the maturity assessment."*
+
+*"I'm sure my answers will be different in a year, so much has happened over the last two years, but now we have our data being collected in a coordinated and consistent way, I am expecting to see great things! We are already using data to influence our decision making process."*
+
+*"We shared the results with our leadership team to benchmark transparently where we were at, build a plan to improve based on the results, and advocated for resources to implement our improvement plan. The results pushed our leadership to make progress on our data maturity. We set a target for increasing our data maturity from a 2.1 to a 3.0 in one year, using the assessment as a tool to measure progress, and were able to meet our goal."*
+
+*"This was a great tool for giving us a shared language to assess and discuss the issues and where we needed to improve. We are struggling to find the right resources to take it forward fully but have implemented key gaps - thank you."*
+
+</center>
+
+Those who were unlikely to recommend the tool expressed a difficulty in understanding where the scores had come from and how they were calculated. It's worth noting that we do provide an explanation of how the scores are calculated [here.](https://www.dataorchard.org.uk/more-about-the-dma-tool/#scoring) However better signposting to this information may be helpful, especially for one-off individual users of the tool.    
+
+
+## Free Individual Version - Not-for-profit users
+
+```{r, include = FALSE}
+# make NFP free users dataframe
+NFP_fr22 <- dat22 %>%
+  filter(is.na(orgs)) %>%
+  filter(Capacity == 
+           'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)')
+
+# look at how complete
+how_comp <- NFP_fr22 %>%
+  select(NFP_howcomplete) %>%
+  group_by(NFP_howcomplete) %>%
+  summarise(n = n())
+```
+
+This section focuses on analysis of the 50 respondents who used the free Individual version of the Data Maturity Assessment Tool for the not-for-profit organisation they work for. Most not-for-profit users of the free tool completed the assessment individually (60%). 26% of users completed it as one of a number of individuals from the same organisation taking the assessment. 14% completed it in a group setting.
+
+Respondents were asked to indicate the nature of their interest in data maturity by selecting from a list. The largest group were Data Champions (36%). There was also a good proportion of Leaders (19%) and Data Strategists (17%). 21% indicated 'other' and provided a range of responses including Data Strategists, an ICT coordinator, and managers of various kinds (Data & Performance, Evaluation & Impact, research leader).
+
+```{r, include = FALSE}
+job <- NFP_fr22 %>%
+  select(interest, interst_other) %>%
+  filter(!is.na(interest)) %>%
+  group_by(interest) %>%
+  summarise(n = n()) %>%
+  mutate(Label = paste0(round(n / sum(n) * 100, 0), "%")) %>%
+  mutate(x = 'x') %>%
+  mutate(interest = case_when(interest == 'Data Advisor (specialist/expert responsible for advising multiple organisations in relation to data)' ~ 'Data Advisor',
+                              interest == 'Data Champion (Data/Database manager, analyst, perhaps in impact evaluation, research, fundraising, digital/ICT, marketing and comms, service management or delivery role)' ~ 'Data Champion',
+                              interest == 'Data Strategist (responsible for leading data strategy across the whole organisation)' ~ 'Data Strategist',
+                              interest == 'Leader in a not-for-profit organisation (CEO, Board Member, Director)' ~ 'Leader', 
+                              interest == 'Other (please specify)' ~ 'Other'))
+
+n_job <- sum(job$n)
+
+p <- ggplot(job, aes(x = x, y = n, fill = factor(interest, 
+                                                 c("Other",
+                                                   "Leader",
+                                                   "Data Advisor",
+                                                   "Data Strategist",
+                                                   "Data Champion"
+                                                   )),
+            text = paste(
+              "<b>", interest, "</b>", 
+              "<br>",
+              "count = ", n,
+              "<br>",
+              "(", Label, ")"
+            ))) +
+  geom_bar(position="fill", stat="identity") +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = c(" ")) +
+  xlab(" ") +
+  ylab(" ") +
+  scale_fill_manual(values = colour_scheme, 
+                    breaks = c("Data Champion", "Data Advisor", "Data Strategist", "Leader", "Other")) +
+  theme_bw(base_size = 13) +
+  guides(fill=guide_legend(title = " ")) +
+  coord_flip()
+
+job_plot <- ggplotly(p, tooltip = 'text') %>%
+   layout(legend = list(orientation = "h",
+                        font = list(size = 12),
+                       traceorder = "reversed",
+                       x = '-0.12',
+                       y = '-0.17'),
+          margin = list(t = 150, r = 0, l = 0, b = 70)) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_job),
+    x = 1,
+    y = 1.12,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  ) %>%
+  layout(title = list(text = paste(str_wrap("Which of these best describes your role/interest in data maturity?", 65)),
+                      font = list(size = 20)))
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4, fig.cap = 'Figure 6: Users by the nature of their interest in data in their organisation', fig.alt = "Single stacked bar chart showing responses from not-for-profit free users to question ‘which of these best describes you role/interest in data maturity?’. 47 respondents. Data champion = 36%, data strategist = 17%, data advisor = 6%, leader = 19%, other = 21%."}
+job_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4, fig.cap = 'Figure 6: Users by the nature of their interest in data in their organisation', fig.alt = "Single stacked bar chart showing responses from not-for-profit free users to question ‘which of these best describes you role/interest in data maturity?’. 47 respondents. Data champion = 36%, data strategist = 17%, data advisor = 6%, leader = 19%, other = 21%."}
+htmlwidgets::saveWidget(widget = job_plot, file = "plots/job_plot.html")
+webshot(url = "plots/job_plot.html", file = "plots/job_plot.png", delay = 1, zoom = 4, vheight = 500)
+```
+
+### Motivations
+
+For users of our free individual version of the tool, the most common motivation for taking the assessment was *to learn more about data maturity*. The next biggest motivation was *wanting to get better with data but not knowing where to start*. *Testing its suitability for colleagues to complete in order to help people in the organisation think/talk about data* was also a popular answer. Other reasons included *being asked to do it by a colleague* and *wanting to check how well the organisation is doing*. 
+
+```{r, include = FALSE}
+# make dataframe
+mot_NFP_fr22 <- NFP_fr22 %>%
+  select(NFPmotivA:NFPmotivJ)
+# remove those who didnt answer at all
+mot_NFP_fr22 <- mot_NFP_fr22[rowSums(is.na(mot_NFP_fr22)) != ncol(mot_NFP_fr22), ]
+n_mot_NFP_fr22 <- nrow(mot_NFP_fr22)
+mot_NFP_fr22 <- setNames(
+  rev(stack(colSums(!is.na(mot_NFP_fr22)))),
+  c("motive", "Total")) %>%
+  mutate(perc = round(`Total` / n_mot_NFP_fr22 * 100, 0)) %>%
+  mutate(Label = paste0(round(`Total` / n_mot_NFP_fr22 * 100, 0), "%"))
+  
+mot_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPmotivA", "NFPmotivB", "NFPmotivC", "NFPmotivD",
+                  "NFPmotivE", "NFPmotivF", "NFPmotivG", "NFPmotivH",
+                  "NFPmotivI", "NFPmotivJ")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+  
+
+p <- ggplot(mot_NFP_fr22, aes( 
+                       x = factor(motive, c("NFPmotivJ", "NFPmotivG", "NFPmotivA", "NFPmotivE",
+                                            "NFPmotivF", "NFPmotivD", "NFPmotivB", "NFPmotivI",
+                                            "NFPmotivC", "NFPmotivH")),
+                       y = perc,
+                       fill = motive,
+                       text = paste("count =", Total,
+                                    "<br>",
+                                    "(", Label, ")"))) +
+  geom_col() +
+ scale_x_discrete(labels = vapply(mot_NFP_labels, str_wrap, character(1), width = 45)) +
+  
+  scale_fill_manual(values = colour_scheme) +
+  scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+  
+  labs(x = " ", y = "Percentage of people who were motivated by this factor") +
+  theme_bw(base_size = 13) +
+  theme(legend.position="none")  +
+  coord_flip()
+
+mot_NFP_fr22_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(
+    autosize = T,
+         margin = list(t = 105)) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_mot_NFP_fr22),
+    x = 1,
+    y = 1.05,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)) %>%
+    layout(title = list(text = paste("Which of these were motivations for taking a data maturity assessment?",
+                                       "<br />",
+                                       "<sup>", "(tick all that apply)", "</sup>"),
+                        font = list(size = 20)),
+           xaxis = list(titlefont = list(size = 14), title = "Percentage of people who were motivated by this factor"))
+    
+    
+#  "Which of these were motivations for taking a Data Maturity Assessment?",
+#subtitle = "(tick all that apply)"
+  
+  
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%. "}
+mot_NFP_fr22_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 9, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%."}
+htmlwidgets::saveWidget(widget = mot_NFP_fr22_plot, file = "plots/mot_NFP_fr22_plot.html")
+webshot(url = "plots/mot_NFP_fr22_plot.html", file = "plots/mot_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 800)
+```
+
+### Outcomes
+
+#### Benefits
+
+The most common benefit cited by users of the free individual version was *to gain an objective reflection of where the organisation is at* (around 80% experience this moderately or extensively). *Increased motivations and raised aspirations within the organisation* were also frequently chosen answers, along with *improved understanding about important factors and questions*. 
+
+```{r making-NFP-free-benefits-plot, include = FALSE}
+# make dataframe
+ben_NFP_fr22 <- NFP_fr22 %>%
+  select(NFPbenefA:NFPbenefG) 
+# remove those who didnt answer at all
+ben_NFP_fr22 <- ben_NFP_fr22[rowSums(is.na(ben_NFP_fr22)) != ncol(ben_NFP_fr22), ]
+# calculate no. respondents
+n_ben_NFP_fr22 <- nrow(ben_NFP_fr22)
+ben_NFP_fr22 <- ben_NFP_fr22 %>%
+  gather(NFPbenefA:NFPbenefG, key = 'benefit', value = 'result') %>%
+  group_by(benefit, result) %>%
+  summarise(total = n()) %>%
+# mark any partially answered
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  # calculate % for tooltip
+  mutate(Label = paste0(round(total / sum(total) * 100, 0), "%"))
+
+ben_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPbenefA", "NFPbenefB", "NFPbenefC", "NFPbenefD",
+                     "NFPbenefE", "NFPbenefF", "NFPbenefG")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+
+p <- ggplot(ben_NFP_fr22, aes(fill = factor(result,
+                                     c("not answered",
+                                     "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively"
+                                       )),
+                       y = total, 
+                       x = factor(benefit,
+                                  c("NFPbenefE",
+                                    "NFPbenefF",
+                                    "NFPbenefG",
+                                    "NFPbenefB",
+                                    "NFPbenefC",
+                                    "NFPbenefA",
+                                    "NFPbenefD")),
+                       text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", Label, ")"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab("") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = vapply(ben_NFP_labels, str_wrap, character(1), width = 45)) +
+  scale_fill_manual(values = c("#F04E4B", "#9CCB44", "#64a6a7", "#808285", "#196769"), 
+                    guide = guide_legend(reverse = TRUE),
+                   breaks = c("extensively", "moderately", "a little", "not at all", "not answered")
+                    ) +
+  
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+ben_NFP_fr22_plot <-  ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.16'),
+         margin = list(t = 110),
+         title = list(text = "To what extent did you receive the following benefits?",
+                      font = list(size = 20))) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_ben_NFP_fr22),
+    x = 1,
+    y = 1.05,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%. "}
+ben_NFP_fr22_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%."}
+htmlwidgets::saveWidget(widget = ben_NFP_fr22_plot, file = "plots/ben_NFP_fr22_plot.html")
+webshot(url = "plots/ben_NFP_fr22_plot.html", file = "plots/ben_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 620)
+```
+
+#### Actions
+
+The most common action was *discussing changes with colleagues*, followed by *using the results to guide plans* and *sharing results with others in the organisation*. 74% of respondents chose at least one of these three options. 16% didn't do any of the actions we proposed. 
+
+```{r making-NFP-free-actions-plot, include = FALSE}
+act_NFP_fr22 <- NFP_fr22 %>%
+  select(NFPactionA:NFPactionI)
+# remove those who didnt answer at all
+act_NFP_fr22 <- act_NFP_fr22[rowSums(is.na(act_NFP_fr22)) != ncol(act_NFP_fr22), ]
+n_act_NFP_fr22 <- nrow(act_NFP_fr22)
+
+act_NFP_fr22 <- setNames(
+  rev(stack(colSums(!is.na(act_NFP_fr22)))),
+  c("benefit", "Total")) %>%
+  mutate(perc = round(`Total` / n_act_NFP_fr22 * 100, 0)) %>%
+  mutate(Label = paste0(round(`Total` / n_act_NFP_fr22 * 100, 0), "%"))
+
+act_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPactionA", "NFPactionB", "NFPactionC", "NFPactionD",
+                     "NFPactionE", "NFPactionF", "NFPactionG", "NFPactionH",
+                     "NFPactionI")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+
+
+p <- ggplot(act_NFP_fr22, aes(x = factor(benefit, c("NFPactionI",
+                                             "NFPactionA",
+                                             "NFPactionB",
+                                             "NFPactionH",
+                                             "NFPactionF",
+                                             "NFPactionC",
+                                             "NFPactionD",
+                                             "NFPactionG",
+                                             "NFPactionE")),
+                     #   x=  reorder(benefit, Total), 
+                       y = perc,
+                     fill = benefit, 
+                     text = paste("count =", Total, 
+                                  "<br>",
+                                  "(", Label, ")"))) +
+  geom_col() +
+  scale_x_discrete(labels = vapply(act_NFP_labels, str_wrap, character(1), width = 45)) +
+  xlab(" ") +
+  ylab("Percentage of people who said they took this action") +
+scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+   
+  scale_fill_manual(values = colour_scheme) +
+  theme_bw(base_size = 13) +
+  theme(legend.position="none")  +
+  coord_flip()
+
+
+act_NFP_fr22_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(autosize = T,
+                  margin = list(t = 120)) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_act_NFP_fr22),
+    x = 1,
+    y = 1.05,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)) %>%
+  layout(title = list(text = paste(str_wrap("Following your data maturity assessment, did you do any of the following?", 60), 
+                                   "<br>",
+                                   "<sup>", "(tick all that apply)", "<sup>"),
+                      font = list(size = 20)),
+         xaxis = list(titlefont = list(size = 14), title = "Percentage of people who said they took this action"))
+    
+  
+```
+
+```{r top-3-actions-percent, include = FALSE}
+top_3_actions <- NFP_fr22 %>% select(NFPactionE, NFPactionG, NFPactionD)
+top_3_actions  <- top_3_actions [rowSums(is.na(top_3_actions )) != ncol(top_3_actions ), ]
+
+top_3_actions <- nrow(top_3_actions)
+top_3_actions <- (top_3_actions/n_act_NFP_fr22)*100
+
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 7, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
+act_NFP_fr22_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6.5, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
+htmlwidgets::saveWidget(widget = act_NFP_fr22_plot, file = "plots/act_NFP_fr22_plot.html")
+webshot(url = "plots/act_NFP_fr22_plot.html", file = "plots/act_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 750)
+```
+
+```{r NFP-free-funding-data, include = FALSE}
+funds <- NFP_fr22 %>%
+  select(NFPactionA, NFPactionB, NFPfunds, NFPfunds_useA:NFPfunds_useF) %>%
+  filter(NFPfunds == 'Yes')
+```
+
+Five users (10%) sought internal funding/resources, all five were successful in securing this funding. These resources were generally used for training (60%), new tools (40%), new jobs (60%) and consultancy (40%). One sought external funding but was unsuccessful.
+
+#### Impact
+
+21 of the 52 respondents (42%) said they had implemented a data strategy/improvement plan since completing the assessment. These plans resulted in the following achievements:
+
+```{r NFP-free-strategy-data, include = FALSE}
+NFP_fr22_strategy <- NFP_fr22 %>%
+  select(NFPstrategy) %>%
+  group_by(NFPstrategy) %>%
+  summarise(n = n())
+```
+
+```{r, include = FALSE}
+ach_NFP_fr22 <- NFP_fr22 %>%
+  select(NFPachieveA:NFPachieveI) 
+# remove those who didnt answer at all
+ach_NFP_fr22 <- ach_NFP_fr22[rowSums(is.na(ach_NFP_fr22)) != ncol(ach_NFP_fr22), ]
+n_ach_NFP_fr22 <- nrow(ach_NFP_fr22)
+ach_NFP_fr22 <- ach_NFP_fr22 %>%
+  gather(NFPachieveA:NFPachieveI, key = 'outcome', value = 'result') %>%
+  group_by(outcome, result) %>%
+  summarise(total = n()) %>%
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(perc = paste0(round(total / n_ach_NFP_fr22 * 100, 0), "%"))
+
+
+ach_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPachieveA", "NFPachieveB", "NFPachieveC", "NFPachieveD",
+                     "NFPachieveE", "NFPachieveF", "NFPachieveG", "NFPachieveH", 
+                     "NFPachieveI")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+
+p <- ggplot(ach_NFP_fr22, aes(fill = factor(result,
+                                     c("not answered",
+                                       "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively"
+                                       )),
+                       y = total, 
+                       x = factor(outcome, 
+                                  c("NFPachieveB",
+                                    "NFPachieveF",
+                                    "NFPachieveC",
+                                    "NFPachieveE",
+                                    "NFPachieveG",
+                                    "NFPachieveD",
+                                    "NFPachieveA",
+                                    "NFPachieveI",
+                                    "NFPachieveH")),
+                       text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", perc, ")"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab(" ") +
+  guides(fill=guide_legend(title=" ")) +
+   scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_fill_manual(values = c("#196769", "#808285", "#64A6A7", "#9CCB44", "#F04E4B")) +
+  scale_x_discrete(labels = vapply(ach_NFP_labels, str_wrap, character(1), width = 45)) +
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+ach_NFP_fr22_plot <-  ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14), 
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.16'),
+         margin = list (t = 120),
+         title = list(text = paste(str_wrap("To what extent have you used data to achieve the following?", 65), 
+                                   "<br>",
+                                   "<sup>", "As a result of implementing the data strategy/plan", "</sup>"),
+         font = list(size = 20))) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_ach_NFP_fr22),
+    x = 1,
+    y = 1.07,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6.5, fig.cap = 'Figure 10: Impacts or achievements resulting from a data maturity assessment for free Individual version users', fig.alt = "Stacked bar chart showing ratings by not-for-profit free users in answer to ‘to what extent have you used data to achieve following as a result of implementing a data strategy / plan?’. 20 respondents. Increased knowledge and expertise: extensively = 5%, moderately = 50%, a little = 40%, not at all = 5%. Increased collaboration and data sharing for strategic benefits with partners/stakeholders: extensively = 5%, moderately = 30%, a little = 30%, not at all = 25%, not answered = 10%. Improved strategic planning and decision making: extensively = 10%, moderately = 20%, a little = 50%, not at all = 10%, not answered = 10%. Improved services and/or products: extensively = 5%, moderately = 25%, a little = 40%, not at all = 25%, not answered = 5%. Strengthened partnerships/networks: moderately = 30%, a little = 35%, not at all = 30%, not answered = 5%. Efficiency savings (resources, processes, service/product delivery): extensively = 5%, moderately = 20%, a little = 40%, not at all = 30%, not answered = 5%. Improved impact: moderately = 25%, a little = 50%, not at all = 15%, not answered = 10%. Increased credibility and influence: moderately = 15%, a little = 60%, not at all = 15%, not answered = 10%. Increased income (grants, sales, contracts, donations) : a little = 25%, not at all = 60%, not answered = 15%."}
+ach_NFP_fr22_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 7.5, fig.cap = 'Figure 10: Impacts or achievements resulting from a data maturity assessment for free Individual version users', fig.alt = "Stacked bar chart showing ratings by not-for-profit free users in answer to ‘to what extent have you used data to achieve following as a result of implementing a data strategy / plan?’. 20 respondents. Increased knowledge and expertise: extensively = 5%, moderately = 50%, a little = 40%, not at all = 5%. Increased collaboration and data sharing for strategic benefits with partners/stakeholders: extensively = 5%, moderately = 30%, a little = 30%, not at all = 25%, not answered = 10%. Improved strategic planning and decision making: extensively = 10%, moderately = 20%, a little = 50%, not at all = 10%, not answered = 10%. Improved services and/or products: extensively = 5%, moderately = 25%, a little = 40%, not at all = 25%, not answered = 5%. Strengthened partnerships/networks: moderately = 30%, a little = 35%, not at all = 30%, not answered = 5%. Efficiency savings (resources, processes, service/product delivery): extensively = 5%, moderately = 20%, a little = 40%, not at all = 30%, not answered = 5%. Improved impact: moderately = 25%, a little = 50%, not at all = 15%, not answered = 10%. Increased credibility and influence: moderately = 15%, a little = 60%, not at all = 15%, not answered = 10%. Increased income (grants, sales, contracts, donations) : a little = 25%, not at all = 60%, not answered = 15%."}
+htmlwidgets::saveWidget(widget = ach_NFP_fr22_plot, file = "plots/ach_NFP_fr22_plot.html")
+webshot(url = "plots/ach_NFP_fr22_plot.html", file = "plots/ach_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 700)
+```
+
+All achievements, apart from increased income, had relatively similar ratings from respondents. *Increased knowledge and expertise* was the top benefit stated. *Increased collaboration and sharing with partners/stakeholders* and *improved strategic planning and decision making* were also important.
+
+## Paid-for Organisational Version - Not-for-profit users
+
+```{r, include = FALSE}
+# make orgs dataframe
+org_dat <- dat22 %>%
+  filter(orgs == "1")
+```
+
+We thought it would be interesting to look at those who undertook a paid-for Organisational assessment separately. These are not-for-profit organisations that conducted an organisation-wide assessment with Data Orchard. Often, but not always, this is alongside other support in getting better with data. Seven organisations who used the paid-for Organisational version of the data maturity assessment responded to our most recent survey. As the sample size is so small this an exploratory look at the findings.
+
+### Motivations
+
+Similar to users of the free tool, organisational leads were motivated by wanting *to learn more about data maturity* and *not knowing where to start*. They weren't as impacted by *sensing as though they were doing worse than peers* or *struggling to engage leadership*. Possibly because, in some cases, a data lead may have to secure a level of support in order to commission an organisational assessment.
+
+People who chose '*other*' mainly specified *wanting a baseline or benchmark within their organisation* and *to check their progress*. 
+
+```{r, include = FALSE}
+mot_org <- org_dat %>%
+  select(NFPmotivA:NFPmotivJ)
+# remove those who didnt answer at all
+mot_org  <- mot_org[rowSums(is.na(mot_org)) != ncol(mot_org), ]
+n_mot_org <- nrow(mot_org)
+mot_org  <- setNames(
+  rev(stack(colSums(!is.na(mot_org)))),
+  c("motive", "Total")) %>%
+  mutate(perc = round(`Total` / n_mot_org * 100, 0)) %>%
+  mutate(Label = paste0(round(`Total` / n_mot_org * 100, 0), "%"))
+
+p <- ggplot(mot_org, aes( 
+                       x = factor(motive, c("NFPmotivJ", "NFPmotivA", "NFPmotivE", "NFPmotivI","NFPmotivF",
+                                                  "NFPmotivD", "NFPmotivG", "NFPmotivB",
+                                                  "NFPmotivC","NFPmotivH")),
+                       y = perc,
+                       fill = motive,
+                       text = paste("count =", Total,
+                                    "<br>",
+                                    "(", Label, ")"))) +
+  geom_col() +
+ scale_x_discrete(labels = vapply(mot_NFP_labels, str_wrap, character(1), width = 45)) +
+   scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+  
+  xlab(" ") +
+  ylab("Percentage of people who were motivated by this factor") +
+  scale_fill_manual(values = colour_scheme) +
+  theme_bw(base_size = 13) +
+  theme(legend.position="none")  +
+  coord_flip()
+
+mot_org_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(autosize = T,
+         margin = list(t = 105)) %>%
+  layout(title = list(text = paste("Which of these were motivations for taking a data maturity assessment",
+                                       "<br>",
+                                       "<sup>", "(tick all that apply)", "</sup>"),
+                      font = list(size = 20)),
+         xaxis = list(titlefont = list(size = 14), title = "Percentage of people who were motivated by this factor")) %>%
+           add_annotations(
+    text = paste("Number of respondents = ", n_mot_org),
+    x = 1,
+    y = 1.07,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15))
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8, fig.cap = 'Figure 11: Motivations for paid-for Organisational version users to take a data maturity assessment', fig.alt = "Horizontal bar chart showing what organisational DMA users said was their motivation for taking an assessment. 7 respondents. To learn more about data maturity = 57%, thought our organisation might need to get better with data but didn't know where to start = 57%, felt data was not 'working' for our organisation's cause = 43%, thought we might be doing quite well compared to other organisations and wanted to check = 29%, couldn't unlock the value of data for decision making = 29%, frustrated with poor and/or outdated data systems and tools = 14%, to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 14%, struggled to engage senior leaders in driving improvements around data = 0%, sensed we weren't doing so well compared to other organisations in our sector = 0%, other = 43%."}
+mot_org_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8.5, fig.cap = 'Figure 11: Motivations for paid-for Organisational version users to take a data maturity assessment', fig.alt = "Horizontal bar chart showing what organisational DMA users said was their motivation for taking an assessment. 7 respondents. To learn more about data maturity = 57%, thought our organisation might need to get better with data but didn't know where to start = 57%, felt data was not 'working' for our organisation's cause = 43%, thought we might be doing quite well compared to other organisations and wanted to check = 29%, couldn't unlock the value of data for decision making = 29%, frustrated with poor and/or outdated data systems and tools = 14%, to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 14%, struggled to engage senior leaders in driving improvements around data = 0%, sensed we weren't doing so well compared to other organisations in our sector = 0%, other = 43%."}
+htmlwidgets::saveWidget(widget = mot_org_plot, file = "plots/mot_org_plot.html")
+webshot(url = "plots/mot_org_plot.html", file = "plots/mot_org_plot.png", delay = 1, zoom = 4, vheight = 800)
+```
+
+### Outcomes
+
+#### Benefits
+
+Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version have experienced more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
+
+-   They are more invested in data maturity (taken the time and invested resources to do an organisational assessment)
+
+-   Often organisational assessments are taken within an overall plan to develop a data strategy
+
+```{r, include = FALSE}
+ben_org_dat <- org_dat %>%
+  select(NFPbenefA:NFPbenefG) 
+# remove those who didnt answer at all
+ben_org_dat <- ben_org_dat[rowSums(is.na(ben_org_dat)) != ncol(ben_org_dat), ]
+n_ben_org_dat <- nrow(ben_org_dat)
+ben_org_dat <- ben_org_dat %>%
+  gather(NFPbenefA:NFPbenefG, key = 'benefit', value = 'result') %>%
+  group_by(benefit, result) %>%
+  summarise(total = n()) %>%
+  # mark any partially answered
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(Label = paste0(round(total / sum(total) * 100, 0), "%"))
+
+p <- ggplot(ben_org_dat, aes(fill = factor(result,
+                                     c("not answered",
+                                       "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively"
+                                       )),
+                       y = total, 
+                       x = factor(benefit,
+                                  c("NFPbenefG",
+                                    "NFPbenefA",
+                                     "NFPbenefF",
+                                     "NFPbenefD",
+                                                                         "NFPbenefE",
+
+                                        "NFPbenefB",
+                                    "NFPbenefC"
+                                    )),
+                       text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", Label, ")"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab("") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = vapply(ben_NFP_labels, str_wrap, character(1), width = 45)) +
+  scale_fill_manual(values = c("#F04E4B", "#9CCB44", "#64a6a7", "#808285", "#196769"), 
+                    guide = guide_legend(reverse = TRUE),
+                   breaks = c("extensively", "moderately", "a little", "not at all", "not answered")
+                    ) +
+  
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+ben_org_dat_plot <-  ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.16'),
+         margin = list(t = 110),
+         title = list(text = "To what extend did you receive the following benefits?",
+                      font = list(size = 20))) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_ben_org_dat),
+    x = 1,
+    y = 1.08,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6, fig.cap = 'Figure 12: Benefits experienced by organisations after an Organisational data maturity assessment', fig.alt = "Stacked bar chart showing how what organisational DMA users rated the extent to which the received the following benefits. 7 respondents. Increased motivation to improve my organisation's data maturity: extensively = 71%, moderately = 29%. Raised my aspirations for what's possible in my organisation: extensively = 71%, moderately =14%, a little = 14%, not at all = 8%. Highlighted different perceptions about data across my organisation: extensively = 57%, moderately = 43%. Provided an objective reflection of where my organisation was at: extensively = 43%, moderately = 57%. Identified clear priorities to focus on: extensively = 43%, moderately = 57%. Improved my understanding about important factors and questions: extensively = 14%, moderately = 86%. Reassured me that my organisation is on the right track: extensively = 14%, moderately = 57%, a little = 14%, not at all = 14%."}
+ben_org_dat_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6.5, fig.cap = 'Figure 12: Benefits experienced by organisations after an Organisational data maturity assessment', fig.alt = "Stacked bar chart showing how what organisational DMA users rated the extent to which the received the following benefits. 7 respondents. Increased motivation to improve my organisation's data maturity: extensively = 71%, moderately = 29%. Raised my aspirations for what's possible in my organisation: extensively = 71%, moderately =14%, a little = 14%, not at all = 8%. Highlighted different perceptions about data across my organisation: extensively = 57%, moderately = 43%. Provided an objective reflection of where my organisation was at: extensively = 43%, moderately = 57%. Identified clear priorities to focus on: extensively = 43%, moderately = 57%. Improved my understanding about important factors and questions: extensively = 14%, moderately = 86%. Reassured me that my organisation is on the right track: extensively = 14%, moderately = 57%, a little = 14%, not at all = 14%."}
+htmlwidgets::saveWidget(widget = ben_org_dat_plot, file = "plots/ben_org_dat_plot.html")
+webshot(url = "plots/ben_org_dat_plot.html", file = "plots/ben_org_dat_plot.png", delay = 1, zoom = 4, vheight = 620)
+```
+
+#### Actions
+
+All user of the Organisational version who answered this question *shared the results within their organisation*. Six of seven users (86%) went on to *discuss changes with colleagues*, *secure leadership support* and *use them to guide plans for a data strategy*. No-one took *no action*. 
+
+```{r, include = FALSE}
+
+# make dataframe
+act_org_dat <- org_dat %>%
+  select(NFPactionA:NFPactionI)
+# remove those who didnt answer at all
+act_org_dat <- act_org_dat[rowSums(is.na(act_org_dat)) != ncol(act_org_dat), ]
+n_act_org_dat <- nrow(act_org_dat)
+act_org_dat <- setNames(
+  rev(stack(colSums(!is.na(act_org_dat)))),
+  c("benefit", "Total")) %>%
+  mutate(perc = round(`Total` / n_act_org_dat * 100, 0)) %>%
+  mutate(Label = paste0(round(`Total` / n_act_org_dat * 100, 0), "%"))
+
+p <- ggplot(act_org_dat, aes(x = factor(benefit, c("NFPactionI",
+                                             "NFPactionA",
+                                             "NFPactionB",
+                                             "NFPactionH",
+                                             "NFPactionC",
+                                             "NFPactionF",
+                                             "NFPactionG",
+                                             "NFPactionE",
+                                             "NFPactionD"
+)),
+                     #   x=  reorder(benefit, Total), 
+                       y = perc,
+                     fill = benefit, 
+                     text = paste("count =", Total,
+                                  "<br>",
+                                  "(", Label, ")"))) +
+  geom_col() +
+  scale_x_discrete(labels = vapply(act_NFP_labels, str_wrap, character(1), width = 45)) +
+  scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+ 
+  xlab(" ") +
+  ylab("Percentage of people who said they took this action") +
+  scale_fill_manual(values = colour_scheme) +
+  theme_bw(base_size = 13) +
+  theme(legend.position="none")  +
+  coord_flip()
+
+
+act_org_dat_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(autosize = T,
+         margin = list(t = 120)) %>%
+  layout(title = list(text = paste(str_wrap("Following your data maturity assessment, did you do any of the following?", 65), 
+                                   "<br>",
+                                   "<sup>", "(tick all that apply)", "<sup>"),
+                      font = list(size = 20)),
+         xaxis = list(titlefont = list(size = 14), title = "Percentage of people who said they took this action")) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_act_org_dat),
+    x = 1,
+    y = 1.07,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+```
+
+```{r, include = FALSE}
+org_funds <- org_dat %>%
+  select(NFPactionA, NFPactionB, NFPfunds:NFPfunds_useF)
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 7, fig.cap = 'Figure 13: Actions taken by organisational leads following a data maturity assessment', fig.alt = "Horizontal bar chart showing what actions organisational DMA users said they took following a data maturity assessment (tick all that apply). 7 respondents. shared your results report with other people in the organisation = 100%. Discussed with colleagues where change and improvement was needed = 86%, used the assessment results internally to guide plans for developing data strategy/maturity = 86%, secured leadership support for change and improvement = 86%. Invited colleagues to also take the assessment = 43%, sought external expert advice/consultancy to help with data strategy/maturity = 43%, sought funding/resources from internal budgets to implement improvements = 43%. Applied for external funding to implement improvements = 0%, none of the above = 0%."}
+act_org_dat_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6.75, fig.cap = 'Figure 13: Actions taken by organisational leads following a data maturity assessment', fig.alt = "Horizontal bar chart showing what actions organisational DMA users said they took following a data maturity assessment (tick all that apply). 7 respondents. shared your results report with other people in the organisation = 100%. Discussed with colleagues where change and improvement was needed = 86%, used the assessment results internally to guide plans for developing data strategy/maturity = 86%, secured leadership support for change and improvement = 86%. Invited colleagues to also take the assessment = 43%, sought external expert advice/consultancy to help with data strategy/maturity = 43%, sought funding/resources from internal budgets to implement improvements = 43%. Applied for external funding to implement improvements = 0%, none of the above = 0%."}
+htmlwidgets::saveWidget(widget = act_org_dat_plot, file = "plots/act_org_dat_plot.html")
+webshot(url = "plots/act_org_dat_plot.html", file = "plots/act_org_dat_plot.png", delay = 1, zoom = 4, vheight = 800)
+```
+
+Three organisations sought funding/resources from internal budgets, all were successful. One organisation spent these funds on consultancy/external support, one spent them on new tools and training, and one spent them on new jobs and new roles as well as new tools, training and consultancy/external support.
+
+#### Impact
+
+Of seven respondents, two implemented a data strategy/plan after the assessment. As a result of this plan, there were limited achievements, with all achievements rated as being experienced *'moderately'* or *'a little'*. Improved strategic planning, improved services, efficiency savings and improved impact where achieved *moderately* by both organisations. 
+
+It typically takes some months to devise a data strategy and secure the resources for implementation. Following implementation of a strategy, it then takes even more time to create the change needed to deliver impact. It is therefore not surprising that at this stage (i.e. within 0-17 months of taking an assessment) the long-term impacts are yet to be seen.
+
+```{r, include = FALSE}
+org_strategy <- org_dat %>%
+  select(NFPstrategy) %>%
+  group_by(NFPstrategy) %>%
+  summarise(n = n())
+```
+
+```{r, include = FALSE}
+# make dataframe
+
+ach_org <- org_dat %>%
+  select(NFPachieveA:NFPachieveI) 
+# remove those who didnt answer at all
+ach_org <- ach_org[rowSums(is.na(ach_org)) != ncol(ach_org), ]
+n_ach_org <- nrow(ach_org)
+ach_org <- ach_org %>%
+  gather(NFPachieveA:NFPachieveI, key = 'outcome', value = 'result') %>%
+  group_by(outcome, result) %>%
+  summarise(total = n()) %>%
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(perc = paste0(round(total / n_ach_org * 100, 0), "%"))
+
+p <- ggplot(ach_org, aes(fill = factor(result,
+                                     c("not answered",
+                                       "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively"
+                                       )),
+                       y = total, 
+                       x = factor(outcome, 
+                                  c("NFPachieveI",
+                                    "NFPachieveF",
+                                    "NFPachieveB",
+                                    "NFPachieveG",
+                                    "NFPachieveC",
+                                    "NFPachieveE",
+                                    "NFPachieveD",
+                                    "NFPachieveH",
+                                    "NFPachieveA")),
+                       text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", perc, ")"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab(" ") +
+  guides(fill=guide_legend(title=" ")) +
+   scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_fill_manual(values = c("#196769", "#808285", "#64A6A7", "#9CCB44", "#F04E4B")) +
+  scale_x_discrete(labels = vapply(ach_NFP_labels, str_wrap, character(1), width = 45)) +
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+ach_org_plot <-  ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14), 
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.16'),
+         margin = list(t = 120)) %>%
+    layout(title = list(text = paste(str_wrap("To what extent have you used data to achieve the following?", 65), 
+                                   "<br>",
+                                   "<sup>", "As a result of implementing the data strategy/plan", "</sup>")),
+           font = list(size = 20)) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_ach_org),
+    x = 1,
+    y = 1.07,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+
+```
+
+## Support Providers Analysis
+
+```{r, include = FALSE}
+# make data support providers dataframe
+SP <- dat22 %>%
+  filter(Capacity == 'For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)')
+
+```
+
+Support providers are organisations that support non-profits to assess and improve their data maturity. They may be consultants or infrastructure organisations. Five respondents selected this description for themselves.
+
+### Motivations
+
+Five support providers responded to the question about their motivations for completing a data maturity assessment:
+
+-   Two were motivated by *testing its suitability for the client to use* and *to help clients work out where to start improving*
+
+-   One person was motivated by each of: *learning more about data maturity*, *engaging senior leaders,* *demonstrating sector comparison*, *diagnosing how they're doing,* and *completing the assessment on behalf of their organisation* 
+
+-   None were motivated a by *gaining a baseline to check impact of support*
+
+### Outcomes
+
+#### Benefits
+
+Benefits for support providers were fairly broad, the two most significant benefits being *raising awareness of what good practice looks like* and *reassurance that they were on the right track in their support or advice for the client*. No respondents specified any *'other'* benefits they received.
+
+```{r, include = FALSE}
+ben_SP <- SP %>%
+  select(SPbenefA:SPbenefF) 
+# remove those who didnt answer at all
+ben_SP <- ben_SP[rowSums(is.na(ben_SP)) != ncol(ben_SP), ]
+n_ben_SP <- nrow(ben_SP)
+ben_SP <- ben_SP %>%
+  gather(SPbenefA:SPbenefF, key = 'benefit', value = 'result') %>%
+  group_by(benefit, result) %>%
+  summarise(total = n()) %>%
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(Label = paste0(round(total / sum(total) * 100, 0), "%"))
+
+
+ben_SP_labels <- csvMapping %>%
+  filter(QRef %in% c("SPbenefA", "SPbenefB", "SPbenefC", "SPbenefD",
+                     "SPbenefE", "SPbenefF")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+
+p <- ggplot(ben_SP, aes(fill = factor(result,
+                                     c("not answered",
+                                     "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively")),
+                       y = total, 
+                       x = factor(benefit,
+                                  c("SPbenefB",
+                                    "SPbenefC",
+                                    "SPbenefD",
+                                    "SPbenefA",
+                                    "SPbenefE",
+                                    "SPbenefF")),
+                   text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", total,
+                                 "<br>",
+                                 "(", Label, ")"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab(" ") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                     limits = c(0, 1)
+                     ) +
+  scale_fill_manual(values = c("#808285", "#64A6A7", "#9CCB44", "#F04E4B")) +
+  scale_x_discrete(labels = vapply(ben_SP_labels, str_wrap, character(1), width = 45)) +
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+ben_SP_plot <-  ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14), 
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.16'),
+         title = list(text = "To what extent did you receive the following benefits?",
+                      font = list(size = 20)),
+                  margin = list(t = 110)) %>%
+  add_annotations(
+    text = paste("Number of respondents = ", n_ben_SP),
+    x = 1,
+    y = 1.07,
+    yref = "paper",
+    xref = "paper",
+    xanchor = "right",
+    yanchor = "top",
+    showarrow = FALSE,
+    font = list(size = 15)
+  )
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6, fig.cap = 'Figure 14: Benefits experienced by support providers',  fig.alt = "Stacked bar chart showing ratings from service providers for how they experienced the following benefits. 5 respondents. Reassured me I was on the right track in my support/advice to my client: extensively = 20%, moderately = 60%, a little = 20%. Raised my awareness of what good practice looks like: extensively = 20%, moderately = 60%, a little = 20%. Improved my understanding about important factors and questions: moderately = 80%, a little = 20%. Provided an objective reflection of where my client's organisation was at: extensively = 20%, moderately = 40%, a little = 40%. Increased clients' motivation to improve their organisation's data maturity: moderately = 60%, a little = 20%, not at all = 20%. Helped diagnose client's support needs: extensively = 20%, moderately = 20%, a little = 20%, not at all = 40%."}
+ben_SP_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 6, fig.cap = 'Figure 14: Benefits experienced by support providers',  fig.alt = "Stacked bar chart showing ratings from service providers for how they experienced the following benefits. 5 respondents. Reassured me I was on the right track in my support/advice to my client: extensively = 20%, moderately = 60%, a little = 20%. Raised my awareness of what good practice looks like: extensively = 20%, moderately = 60%, a little = 20%. Improved my understanding about important factors and questions: moderately = 80%, a little = 20%. Provided an objective reflection of where my client's organisation was at: extensively = 20%, moderately = 40%, a little = 40%. Increased clients' motivation to improve their organisation's data maturity: moderately = 60%, a little = 20%, not at all = 20%. Helped diagnose client's support needs: extensively = 20%, moderately = 20%, a little = 20%, not at all = 40%."}
+
+htmlwidgets::saveWidget(widget = ben_SP_plot, file = "plots/ben_SP_plot.html")
+webshot(url = "plots/ben_SP_plot.html", file = "plots/ben_SP_plot.png", delay = 1, zoom = 4, vheight = 620)
+```
+
+#### Actions
+
+Three support providers responded to our question about actions taken after the data maturity assessment:
+
+-   two said *the client invested in training* and selected nothing else
+
+-   one said they *secured consultancy*, *adopted new tools* and *created new roles for existing staff*
+
+-   No one said they *created new jobs*, or *other*
+
+## Conclusion
+
+### Users of the Free Individual Version
+
+Overall, these results support our theory of change. Most users of the free Individual version of the tool were able to gain an objective reflection of where they are at and engaged in discussions with colleagues after taking the assessment. We see this as an important first step to improving data maturity.
+
+The top motivation for taking an assessment was to learn more (62% of respondents cited this). 72% of respondents agreed that improved understanding about important factors and questions was a benefit of taking the assessment. This suggests that people are gaining what they hoped from the tool: a greater understanding of data maturity.
+
+Although it is promising to see that using our assessment tool leads to positive action for most people, it would be useful to know why - for 16% of people - it doesn't. If these people are simply wanting to learn about data maturity, then committing no further actions is not surprising. However, in order for our tool to have long-term implications in the not-for-profit sector we need it to lead to positive changes and action.
+
+Although only a few sought funding (internally or externally), it is of note that almost all of them were successful. This indicates that it is possible that the Data Maturity Assessment Tool could be a useful aid in securing funds. Our theory of change predicts that these funds (which were spent on training, new tools, new jobs) could lead to long-term rewards and benefits. For example, *increased knowledge and expertise*, *better decision making*, *better services and products*.
+
+42% of respondents went on to implement a data strategy, although not many achievements were made 'extensively' from this. It could be that it is too soon to see long-term achievements. Of the 50 not-for-profit users of the free tool who responded to our survey, 34 (60%) took a data maturity assessment for the first time less than six months before the impact survey. Additionally, it could be that there are other achievements of a data strategy that our theory of change does not address. Or that the strategies people are implementing are not that effective. Our assumption is that it’s still too early to see the impacts of data strategy implementations, so watch this space. 
+
+### Paid-for Organisational Version Users
+
+Many of the patterns we see in users of the Organisational version of the of the Data Maturity Assessment Tool are similar to that of users of the free Individual version. There is a high motivation to learn about data maturity and the most common actions are sharing results and discussing data maturity with colleagues.
+
+Importantly, most users of Organisational version experienced all the benefits we asked about at least moderately. Furthermore, many more benefits were experienced *'extensively'*, compared to that of free Individual version users.
+
+The fact that no respondents said they took *no action* after taking the assessment is support for the impact of our tool as a driver of change. Around 40% implemented a data strategy plan with limited achievements (as mentioned previously, this is possibly because there has not been sufficient time to see the fruits of their data strategy implementations).
+
+### Support Providers
+
+It is difficult to make any strong conclusions from these results, as not many support providers completed the survey. For those who did respond, it seems as though the tool supports them by providing reassurance and reinforcing what good practice looks like. Some qualitative data about how this fed into the support they were providing would help us to understand this area better.
+
+# Results: Comparison to 2020 Impact Results
+
+```{r, include = FALSE}
+dat <- bind_rows(dat21, dat22)
+```
+
+### Not-for-profit users
+
+Overall, the results from not-for profit users this year are very similar to those for our previous 2020 impact evaluation.
+
+In 2020, a higher portion of respondents were motivated by:
+
+-   frustrations with poor systems and tools
+
+-   struggling to engage leadership
+
+-   sensing they're not doing so well compared to others.
+
+This year, more people stated *'other'* motivations for taking the assessment.
+
+```{r, include = FALSE}
+NFP <- dat %>%
+  filter(Capacity == 
+           'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)')
+```
+
+```{r, include = FALSE}
+# MOTIVATIONS
+# make dataframes
+mot_NFP_21 <- NFP %>%
+  filter(year == '21') %>%
+  select(NFPmotivA:NFPmotivJ)
+mot_NFP_21 <- mot_NFP_21[rowSums(is.na(mot_NFP_21)) != ncol(mot_NFP_21), ]
+n_mot_21 <- nrow(mot_NFP_21)
+mot_NFP_21 <- setNames(
+  rev(stack(colSums(!is.na(mot_NFP_21)))),
+  c("motive", "Total")) %>%
+
+  mutate(Label = paste0(round(`Total` / n_mot_21 * 100, 0))) %>%
+  mutate('year' = paste("2020 (n=", n_mot_21, ")"))
+
+mot_NFP_22 <- NFP %>%
+  filter(year == '22') %>%
+  select(NFPmotivA:NFPmotivJ)
+mot_NFP_22 <- mot_NFP_22[rowSums(is.na(mot_NFP_22)) != ncol(mot_NFP_22), ]
+n_mot_22 <- nrow(mot_NFP_22)
+mot_NFP_22 <- setNames(
+  rev(stack(colSums(!is.na(mot_NFP_22)))),
+  c("motive", "Total")) %>%
+  mutate(Label = paste0(round(`Total` / n_mot_22 * 100, 0))) %>%
+  mutate('year' = paste("2022 (n=", n_mot_22, ")"))
+
+mot_NFP <- bind_rows(mot_NFP_22, mot_NFP_21)
+
+
+
+mot_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPmotivA", "NFPmotivB", "NFPmotivC", "NFPmotivD",
+                     "NFPmotivE", "NFPmotivF", "NFPmotivG", "NFPmotivH",
+                     "NFPmotivI", "NFPmotivJ")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+
+
+p <- ggplot(mot_NFP, aes( 
+  x = factor(motive, c("NFPmotivJ", "NFPmotivG", "NFPmotivA", "NFPmotivE",
+                       "NFPmotivF", "NFPmotivD", "NFPmotivB", "NFPmotivI",
+                       "NFPmotivC", "NFPmotivH")),
+  y = as.numeric(Label),
+  fill = year,
+  text = paste("count = ", Total,
+               "<br>",
+               "(", Label, "%)"))) +
+  geom_col(position = "dodge") +
+  scale_x_discrete(labels = vapply(mot_NFP_labels, str_wrap, character(1), width = 43)) +
+    scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+ 
+  xlab(" ") +
+  ylab("Percent of people motivated by this factor") +
+  scale_fill_manual(values = c("#64A6A7","#F04E4B")) +
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+mot_NFP_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14),
+                       x = "-0.15",
+                       y = "-0.14"),
+         margin = list(t = 130),
+        xaxis = list(titlefont = list(size = 14), title = "Percent of people motivated by this factor"),
+         title = list(text = paste("Which of these were motivations for",
+                                   "taking a data maturity assessment",
+                                   "<br>",
+                                   "<sup>", "(tick all that apply)", "</sup>"),
+                      font = list(size = 20))
+)
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 9, fig.cap = 'Figure 15: Motivations for taking the assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Grouped bar chart showing what not-for-profit users selected as their motivations in the 2021 and 2022 impact surveys. 52 respondents in 2020, 57 respondents in 2022. To learn more about data maturity: 2020 = 63%, 2022 = 61%. Thought our organisation might need to get better with data but didn't know where to start: 2020 = 46%, 2022 = 47%. To test its suitability for colleagues to complete to help people in the organisation think/talk about data: 2020 = 40%, 2022 = 35%. Felt data was not 'working' for our organisation's cause: 2021 = 29%, 2022 = 33%. Couldn't unlock the value of data for decision making: 2020 = 17%, 2022 = 32%. Frustrated with poor and/or outdated data systems and tools: 2020 = 31%, 2022 = 19%. Struggled to engage senior leaders in driving improvements around data: 2020 = 29%, 2022 = 18%. Sensed we weren't doing so well compared to other organisations in our sector: 2020 = 27%, 2022 = 16%. Thought we might be doing quite well compared to other organisations and wanted to check: 2020 = 8%, 2022 = 11%. Other: 2020 = 4%, 2022 = 19%."}
+mot_NFP_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8.5, fig.cap = 'Figure 15: Motivations for taking the assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Grouped bar chart showing what not-for-profit users selected as their motivations in the 2021 and 2022 impact surveys. 52 respondents in 2020, 57 respondents in 2022. To learn more about data maturity: 2021 = 63%, 2022 = 61%. Thought our organisation might need to get better with data but didn't know where to start: 2020 = 46%, 2022 = 47%. To test its suitability for colleagues to complete to help people in the organisation think/talk about data: 2020 = 40%, 2022 = 35%. Felt data was not 'working' for our organisation's cause: 2020 = 29%, 2022 = 33%. Couldn't unlock the value of data for decision making: 2020 = 17%, 2022 = 32%. Frustrated with poor and/or outdated data systems and tools: 2020 = 31%, 2022 = 19%. Struggled to engage senior leaders in driving improvements around data: 2020 = 29%, 2022 = 18%. Sensed we weren't doing so well compared to other organisations in our sector: 2020 = 27%, 2022 = 16%. Thought we might be doing quite well compared to other organisations and wanted to check: 2020 = 8%, 2022 = 11%. Other: 2020 = 4%, 2022 = 19%."}
+htmlwidgets::saveWidget(widget = mot_NFP_plot, file = "plots/mot_NFP_plot.html")
+webshot(url = "plots/mot_NFP_plot.html", file = "plots/mot_NFP_plot.png", delay = 1, zoom = 4, vheight = 950)
+```
+
+Benefits were similar again, with a higher proportion of respondents reporting moderate benefits in 2020 compared to 2022. The top 3 benefits were the same in both reports:
+
+-   provided an objective reflection of where my organisation was at
+
+-   improved my understanding about important factors and questions
+
+-   increased motivation to improve my organisation's data maturity
+
+```{r, include = FALSE}
+# BENEFITS
+ben_NFP_21 <- NFP %>%
+  filter(year == '21') %>%
+  select(NFPbenefA:NFPbenefG) 
+ben_NFP_21 <- ben_NFP_21[rowSums(is.na(ben_NFP_21)) != ncol(ben_NFP_21), ]
+n_ben_21 <- nrow(ben_NFP_21)
+ben_NFP_21 <- ben_NFP_21 %>%
+  gather(NFPbenefA:NFPbenefG, key = 'benefit', value = 'result') %>%
+  group_by(benefit, result) %>%
+  summarise(n = n()) %>%
+  mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(Label = paste0(round(`n` / sum(`n`) * 100, 0))) %>%
+  mutate('year' = '21')
+
+ben_NFP_22 <- NFP %>%
+  filter(year == '22') %>%
+  select(NFPbenefA:NFPbenefG) 
+ben_NFP_22 <- ben_NFP_22[rowSums(is.na(ben_NFP_22)) != ncol(ben_NFP_22), ]
+n_ben_22 <- nrow(ben_NFP_22)
+ben_NFP_22 <- ben_NFP_22 %>%
+  gather(NFPbenefA:NFPbenefG, key = 'benefit', value = 'result') %>%
+  group_by(benefit, result) %>%
+  summarise(n = n()) %>%
+   mutate(result = case_when(is.na(result) ~ "not answered",
+                            !is.na(result) ~ result)) %>%
+  mutate(Label = paste0(round(`n` / sum(`n`) * 100, 0))) %>%
+  mutate('year' = '22')
+
+
+ben_NFP <- bind_rows(ben_NFP_21, ben_NFP_22)
+
+
+ben_NFP_labels <- csvMapping %>%
+  filter(QRef %in% c("NFPbenefA", "NFPbenefB", "NFPbenefC", "NFPbenefD",
+                     "NFPbenefE", "NFPbenefF", "NFPbenefG")) %>%
+  select(QRef, Raw_2) %>%
+  pivot_wider(names_from = QRef, values_from = Raw_2)
+
+facet_labs <- c(paste("2020 results (n=", n_ben_21, ")"), paste("2022 results (n=", n_ben_22, ")"))
+names(facet_labs) <- c("21", "22")
+
+p <- ggplot(ben_NFP, aes(fill = factor(result,
+                                     c("not answered", 
+                                       "not at all",
+                                       "a little",
+                                       "moderately",
+                                       "extensively")),
+                       y = n, 
+                       x = factor(benefit,
+                                  c("NFPbenefG",
+                                    "NFPbenefF",
+                                    "NFPbenefE",
+                                    "NFPbenefB",
+                                    "NFPbenefC",
+                                    "NFPbenefA",
+                                    "NFPbenefD"
+                                    )),
+       text = paste("<b>", result, "</b>",
+                                 "<br>",
+                                 "count = ", n,
+                                 "<br>",
+                                 "(", Label, "%)"))) +
+  geom_bar(position = "fill", stat = "identity") +
+  xlab(" ") +
+  ylab(" ") +
+  ggtitle("Benefits") +
+  guides(fill=guide_legend(title=" ")) +
+  scale_y_continuous(oob = scales::oob_keep,
+    labels = scales::percent,
+                    limits = c(0, 1)
+                     ) +
+  scale_x_discrete(labels = vapply(ben_NFP_labels, str_wrap, character(1), width = 35)) +
+  scale_fill_manual(values = c("#F04E4B", "#9CCB44", "#64a6a7", "#808285", "#196769"), 
+                    guide = guide_legend(reverse = TRUE),
+                    breaks = c("extensively", "moderately", "a little", "not at all", "not answered")
+  ) +
+  
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(hjust = 0.5))+
+  coord_flip() +
+  facet_grid(.~year,
+             labeller = labeller(year = facet_labs)) +
+  theme(panel.spacing = unit(1.5, "lines"))
+
+ben_NFP_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(legend = list(orientation = "h",
+                       font = list(size = 14),
+                       traceorder = "reversed",
+                       x = '-0.15',
+                       y = '-0.14'),
+         title = list(text = "To what extend did you receive the following benefits?",
+                      font = list(size = 20)),
+         margin = list(t = 110))
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 7.5, fig.cap = 'Figure 16: Benefits of taking the data maturity assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Figure 16: Two stacked bar charts adjacent showing how respondents rated the following benefits in 2020 and 2022 impact reports. No of respondents in 2020 = 48, in 2022 = 57. Provided an objective reflection of where my organisation was at: extensively, 2020 = 50%, 2022 = 49%, moderately, 2020 = 29%, 2022= 46%, a little, 2020 = 12%, 2022= 12%, not at all, 2020 = 8%, 2022= 4%. Improved my understanding about important factors and questions: extensively, 2020 = 29%, 2022 = 21%, moderately, 2020 = 56%, 2022 = 54%, a little, 2020 = 10%, 2022 = 18%, not at all, 2020 = 4%, 2022 = 7%. Increased motivation to improve my organisation's data maturity: extensively, 2020 = 35%, 2022 = 32%, moderately, 2020 = 38%, 2022 = 40%,  a little, 2020 = 21%, 2022 = 23%, not at all, 2020 = 6%, 2022 = 5%. Raised my aspirations for what's possible in my organisation: extensively, 2020 = 25%, 2022 = 33%, moderately, 2020 = 44%, 2022 = 33%,  a little, 2020 = 23%, 2022 = 25%, not at all, 2020 = 8%, 2022 = 9%. Highlighted different perceptions about data across my organisation: extensively, 2020 = 33%, 2022 = 23%, moderately, 2020 = 35%, 2022 = 35%,  a little, 2020 = 21%, 2022 = 23%, not at all, 2020 = 8%, 2022 = 18%, not answered, 2020 = 2%, 2022 = 2%. Identified clear priorities to focus on: extensively, 2020 = 27%, 2022 = 19%, moderately, 2020 = 40%, 2022 = 39%,  a little, 2020 = 23%, 2022 = 32%, not at all, 2020 = 8%, 2022 = 11%, not answered, 2020 = 2%, 2022 = 0%. Reassured me that my organisation is on the right track: extensively, 2020 = 21%, 2022 = 11%, moderately, 2020 = 35%, 2022 = 44%,  a little, 2020 = 23%, 2022 = 37%, not at all, 2020 = 21%, 2022 = 9%."}
+ben_NFP_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 7.5, fig.cap = 'Figure 16: Benefits of taking the data maturity assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Figure 16: Two stacked bar charts adjacent showing how respondents rated the following benefits in 2020 and 2022 impact reports. No of respondents in 2020 = 48, in 2022 = 57. Provided an objective reflection of where my organisation was at: extensively, 2020 = 50%, 2022 = 49%, moderately, 2020 = 29%, 2022= 46%, a little, 2020 = 12%, 2022= 12%, not at all, 2020 = 8%, 2022= 4%. Improved my understanding about important factors and questions: extensively, 2020 = 29%, 2022 = 21%, moderately, 2020 = 56%, 2022 = 54%, a little, 2020 = 10%, 2022 = 18%, not at all, 2020 = 4%, 2022 = 7%. Increased motivation to improve my organisation's data maturity: extensively, 2020 = 35%, 2022 = 32%, moderately, 2020 = 38%, 2022 = 40%,  a little, 2020 = 21%, 2022 = 23%, not at all, 2020 = 6%, 2022 = 5%. Raised my aspirations for what's possible in my organisation: extensively, 2020 = 25%, 2022 = 33%, moderately, 2020 = 44%, 2022 = 33%,  a little, 2020 = 23%, 2022 = 25%, not at all, 2020 = 8%, 2022 = 9%. Highlighted different perceptions about data across my organisation: extensively, 2020 = 33%, 2022 = 23%, moderately, 2020 = 35%, 2022 = 35%,  a little, 2020 = 21%, 2022 = 23%, not at all, 2020 = 8%, 2022 = 18%, not answered, 2020 = 2%, 2022 = 2%. Identified clear priorities to focus on: extensively, 2020 = 27%, 2022 = 19%, moderately, 2020 = 40%, 2022 = 39%,  a little, 2020 = 23%, 2022 = 32%, not at all, 2020 = 8%, 2022 = 11%, not answered, 2020 = 2%, 2022 = 0%. Reassured me that my organisation is on the right track: extensively, 2020 = 21%, 2022 = 11%, moderately, 2020 = 35%, 2022 = 44%,  a little, 2020 = 23%, 2022 = 37%, not at all, 2020 = 21%, 2022 = 9%."}
+htmlwidgets::saveWidget(widget = ben_NFP_plot, file = "plots/ben_NFP_plot.html")
+webshot(url = "plots/ben_NFP_plot.html", file = "plots/ben_NFP_plot.png", delay = 1, zoom = 4, vheight = 650)
+```
+
+It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except more people shared their results with the organisation in 2020.
+
+```{r making-action-plot, include = FALSE}
+# make data frame 
+
+act_NFP_21 <- NFP %>%
+  filter(year == '21') %>%
+  select(NFPactionA:NFPactionI)
+act_NFP_21 <- act_NFP_21[rowSums(is.na(act_NFP_21)) != ncol(act_NFP_21), ]
+n_act_21 <- nrow(act_NFP_21)
+act_NFP_21 <- setNames(
+  rev(stack(colSums(!is.na(act_NFP_21)))),
+  c("action", "Total")) %>%
+  mutate(Label = paste0(round(`Total` / n_act_21 * 100, 0))) %>%
+  mutate('year' = paste("2020 (n=", n_act_21, ")"))
+
+act_NFP_22 <- NFP %>%
+  filter(year == '22') %>%
+  select(NFPactionA:NFPactionI)
+act_NFP_22 <- act_NFP_22[rowSums(is.na(act_NFP_22)) != ncol(act_NFP_22), ]
+n_act_22 <- nrow(act_NFP_22)
+act_NFP_22 <- setNames(
+  rev(stack(colSums(!is.na(act_NFP_22)))),
+  c("action", "Total")) %>%
+  mutate(Label = paste0(round(`Total` / n_act_22 * 100, 0))) %>%
+  mutate('year' = paste("2022 (n=", n_act_22, ")"))
+
+act_NFP <- bind_rows(act_NFP_22, act_NFP_21)
+
+p <- ggplot(act_NFP, aes( 
+  x = factor(action, c("NFPactionI",
+                                             "NFPactionA",
+                                             "NFPactionB",
+                                             "NFPactionH",
+                                             "NFPactionF",
+                                             "NFPactionC",
+                                             "NFPactionD",
+                                             "NFPactionG",
+                                             "NFPactionE")),
+  y = as.numeric(Label),
+  fill = year,
+  text = paste("count = ", Total,
+               "<br>",
+               "(", Label, "%)"))) +
+  geom_col(position = "dodge") +
+  scale_x_discrete(labels = vapply(act_NFP_labels, str_wrap, character(1), width = 43)) +
+    scale_y_continuous(labels=function(x) paste0(x,"%"),
+                     limits = c(0, 100))+ 
+  xlab(" ") +
+  ylab("Percent of people who did this action") +
+  scale_fill_manual(values = c("#64A6A7","#F04E4B")) +
+  theme_bw(base_size = 13) +
+  coord_flip()
+
+act_NFP_plot <- ggplotly(p, tooltip = 'text') %>%
+  layout(margin = list(t = 130),
+         legend = list(orientation = "h",
+                       font = list(size = 14),
+                       x = "-0.15",
+                       y = "-0.14"),
+         xaxis = list(title = list(standoff = 0))) %>%
+  layout(title = list(text = paste(str_wrap("Following your data maturity assessment, did you do any of the following?", 65), 
+                                   "<br>",
+                                   "<sup>", "(tick all that apply)", "<sup>"),
+                      font = list(size = 20)),
+         xaxis = list(titlefont = list(size = 14), title = "Percent of people who did this action"))
+
+
+```
+
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8.5, fig.cap = 'Figure 17: Actions taken after a data maturity assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Grouped bar chart showing what actions not-for-profit users said they took in the 2020 and 2022 impact surveys. 57 respondents in 2020, 49 respondents in 2022. Discussed with colleagues where change and improvement was needed: 2020 = 63%, 2022 = 56%. Used the assessment results internally to guide plans for developing data strategy/maturity: 2020 = 55%, 2022 = 49%. Shared your results report with other people in the organisation: 2020 = 61%, 2022 = 47%. Invited colleagues to also take the assessment: 2020 = 33%, 2022 = 32%. Secured leadership support for change and improvement: 2020 = 35%, 2022 = 26%. Sought external expert advice/consultancy to help with data strategy/maturity: 202020 21 = 24%, 2022 = 14%. Sought funding/resources from internal budgets to implement improvements: 2020 = 20%, 2022 = 14%. Applied for external funding to implement improvements: 2020 = 10%, 2022 = 2%. None of the above: 22020 021 = 8%, 2022 = 14%."}
+act_NFP_plot
+```
+
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8, fig.cap = 'Figure 17: Actions taken after a data maturity assessment from respondents of the 2020 and 2022 impact survey', fig.alt = "Grouped bar chart showing what actions not-for-profit users said they took in the 2020 and 2022 impact surveys. 57 respondents in 2020, 49 respondents in 2022. Discussed with colleagues where change and improvement was needed: 2020 = 63%, 2022 = 56%. Used the assessment results internally to guide plans for developing data strategy/maturity: 2020 = 55%, 2022 = 49%. Shared your results report with other people in the organisation: 2020 = 61%, 2022 = 47%. Invited colleagues to also take the assessment: 2020 = 33%, 2022 = 32%. Secured leadership support for change and improvement: 2020 = 35%, 2022 = 26%. Sought external expert advice/consultancy to help with data strategy/maturity: 202020 21 = 24%, 2022 = 14%. Sought funding/resources from internal budgets to implement improvements: 2020 = 20%, 2022 = 14%. Applied for external funding to implement improvements: 2020 = 10%, 2022 = 2%. None of the above: 22020 021 = 8%, 2022 = 14%."}
+htmlwidgets::saveWidget(widget = act_NFP_plot, file = "plots/act_NFP_plot.html")
+webshot(url = "plots/act_NFP_plot.html", file = "plots/act_NFP_plot.png", delay = 1, zoom = 4, vheight = 900)
+```
+
+Overall, the trend of results is similar for both the 2020 and 2022 Data Maturity Assessment Tool impact surveys.
+
+It appears as though respondents to the 2020 survey gave more noticeable results (i.e. stated more extensive benefits and conducted more actions following the assessment). However, the sample size is too small to say this with any certainty.
+
+### Support providers
+
+As there were only five support providers who responded to our survey this year, and seven who responded in our 2020 survey, the sample size is too small to make any meaningful comparisons. We hope that over the next year we will be able to gather more data to investigate this.
+
+# Conclusion
+
+In this report we present findings from our 2022 Data Maturity Assessment Impact Evaluation Survey. The survey aims to test our theory of change for the Data Maturity Assessment Tool.
+
+The results found were largely what we expected, based on our theory of change. Most users from not-for-profit organisations were highly motivated to take an assessment by wanting to learn more about data maturity and not knowing where to start with getting better with data. The most extensive benefits were increased aspiration and motivation for improving data maturity, providing an objective reflection of where the organisation is at, and highlighting different perceptions about data across the organisation. This is true for users of both the free Individual version and paid-for Organisational version of our tool. Benefits observed by users of the Organisational version were notably more extensive than for users of the free Individual version (although this sample size is small). 
+
+The most common actions following a data maturity assessment were sharing the results and discussing improvements with colleagues. Additionally, a large portion of users of the Organisational version were able to secure leadership support. Around 40% of not-for-profit organisations implemented a data strategy plan following a data maturity assessment. We suspect it is too soon to witness the long-term benefits as a result of this plan.
+
+Throughout this report we also looked at the responses of support providers (organisations that support non-profits to assess and improve their data maturity). No strong conclusions could be made from this based on the small sample size (five respondents).
+
+Finally, we compared the results from the survey to our last impact survey, conducted in 2020, and found a very similar pattern of results. This consistency in findings is promising, as it points towards a reliability in our results.
+
+# Appendix
+
+## Data Maturity Framework
+
+Data maturity is the journey an organisation takes to becoming better at using data. Our framework outlines seven key themes to data maturity along a five-stage journey. The seven themes are: Uses, Data, Analysis, Leadership, Culture, Tools and Skills. The five stages are Unaware, Emerging, Learning, Developing and Mastering. An organisation can score at any of the five stages for each of the seven themes. [Read our full data maturity framework here.](https://www.dataorchard.org.uk/resources/data-maturity-framework)
+
+```{r, echo = FALSE, out.width = '100%', fig.cap = 'Figure 18: Data Maturity Themes and Stages', fig.alt = "An image showing Data Orchard’s Data Maturity Framework. There are 7 key themes: uses, data, analysis, leadership, culture, tools and skills. 5 stages an organisation can be in: unaware, emerging, learning, developing, mastering. "}
+knitr::include_graphics("images/DO_framework.JPG")
+```
+
+## Data Maturity Assessment Tool
+
+We have designed a self-assessment tool that organisations can use to evaluate how they score for each of the seven key themes, and therefore their overall data maturity score. The full assessment takes around 20 minutes. There are three versions of the assessment tool available:
+
+-   Individual - Anyone can use this version to take an assessment for free. Data maturity score is based on that individuals responses.
+
+-   Organisation - Using this version of the tool, multiple people within an organisation take the assessment and the results are compiled into an organisational report. This gives a more accurate data maturity score.
+
+-   Cohort - Multiple organisations can use this version to take the assessment at the same time. Ideal for data consultants, support providers, networks, & membership organisations wanting to advance organisations' data maturity collectively.
+
+## Theory of Change
+
+Our theory of change outlines how we expect the Data Maturity Assessment Tool to have an impact in the short and long term. The theory of change targets specific people and identifies specific problems.
+
+#### Users
+
+The theory of change for our Data Maturity Assessment Tool identifies four key users in the non-for-profit sector:
+
+-   Leader (CEO, director, trustee)
+
+-   Data Champion (Data/database manager, analyst or someone responsible for data in impact evaluation, research, fundraising, digital/ICT, marketing, service management or delivery)
+
+-   Data Strategist (Responsible for data across the whole organisation)
+
+-   Support Provider (A third party who is helping a non-profit organisation get better with data e.g. consultant, product/service company)
+
+#### Problems
+
+We expect these people to be experiencing problems with:
+
+-   Having limited knowledge about data maturity
+
+-   Feel like data is not working for their organisation's cause
+
+-   Wanting to get better at data but not knowing where to start
+
+-   Struggling to engage leaders and colleagues in discussions about data or driving improvements
+
+-   Not knowing what good and great look like, or how well they compare to others. (This could be the sense they are not doing so well and want to check or, after investing effort into data capabilities, feel they are doing better than others and want to check.)
+
+-   Frustrated by poor and/or outdated systems and tools
+
+-   Unable to unlock the value of data for decision making
+
+#### Outcomes
+
+By taking a data maturity assessment, we predict immediate benefits that bring about tangible actions. These actions lead to results that increase data maturity and provide long-term rewards and benefits.
+
+##### Immediate Outcomes
+
+-   Advancing knowledge
+    -   Improved understanding about important factors and questions in organisational data maturity
+    -   Objective reflection of the stage the organisation is currently at
+    -   Increased awareness of different perceptions about data across the organisation
+    -   Identified clear priorities to focus on
+    -   Shared understanding and language about data in the organisation
+-   Changing attitudes
+    -   Raised aspirations of what's possible
+    -   Increased motivation to improve data maturity
+    -   Reassured they are on the right track
+
+##### Actions
+
+-   Share results with colleagues and invite them to take the assessment
+
+-   Discuss with colleagues where improvement is needed
+
+-   Secured leadership support for change and improvement
+
+-   Seek external expert advice on data strategy
+
+-   Seek funding or resources to implement improvements
+
+-   Develop a data strategy/improvement plan
+
+##### Intermediate Outcomes
+
+-   Secure funding or resources
+
+-   Invest in people (existing or new staff roles and responsibilities), tools, advice, and training
+
+-   Implement their data strategy/improvement plans
+
+##### Long-term Outcomes
+
+-   Improved strategic planning and decision making
+
+-   Better services and/or products
+
+-   Greater impact
+
+-   Increased income
+
+-   Efficiency savings
+
+-   Increased credibility and influence
+
+-   Increased knowledge and expertise
+
+-   Increased collaboration and data sharing with strategic partners
+
+```{r, echo = FALSE, out.width = '100%', fig.cap = 'Figure 19: Theory of Change for Data Maturity Assessment', fig.alt = "an image outlining the theory of change for Data Orchard’s Data Maturity Assessment."}
+knitr::include_graphics("images/ToC.JPG")
+```
