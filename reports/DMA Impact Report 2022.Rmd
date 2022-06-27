@@ -131,7 +131,7 @@ In this report we look at the results from this year's Impact Analysis. We also 
 
 ### What we did
 
-We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free Individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisational version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment, where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
+We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free Individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisational version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individual's responses. The Organisational version is an online assessment, where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
 
 We asked about users' experience of taking a data maturity assessment and any benefits they experienced or actions they took as a result of taking an assessment. We received 70 complete responses in total.
 
@@ -180,7 +180,7 @@ responses <- data.frame(row.names = c("Invites Sent", "Responses", "Response Rat
            "Total" = c("707", "70", "9.9%"))
 
 knitr::kable(responses, 
-             caption = 'Figure 1: Table showing invites and response rate for individual and organisational users')
+             caption = 'Figure 1: Table showing invites and response rate for Individual and Organisational version users')
 
 
 ```
@@ -1102,7 +1102,7 @@ We thought it would be interesting to look at those who undertook a paid-for Org
 
 ### Motivations
 
-Similar to users of the free tool, organisational leads were motivated by wanting *to learn more about data maturity* and *not knowing where to start*. They weren't as impacted by *sensing as though they were doing worse than peers* or *struggling to engage leadership*. Possibly because, in some cases, a data lead may have to secure a level of support in order to commission an organisational assessment.
+Similar to users of the free Individual version of the tool, Organisational version users were motivated by wanting *to learn more about data maturity* and *not knowing where to start*. They weren't as impacted by *sensing as though they were doing worse than peers* or *struggling to engage leadership*. Possibly because, in some cases, a data lead may have to secure a level of support in order to commission an Organisational assessment.
 
 People who chose '*other*' mainly specified *wanting a baseline or benchmark within their organisation* and *to check their progress*. 
 
@@ -1173,9 +1173,9 @@ webshot(url = "plots/mot_org_plot.html", file = "plots/mot_org_plot.png", delay 
 
 Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version of the tool report experiencing more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
 
--   They are more invested in data maturity (taken the time and invested resources to do an organisational assessment)
+-   They are more invested in data maturity (taken the time and invested resources to do an Organisational assessment)
 
--   Often organisational assessments are taken within an overall plan to develop a data strategy
+-   Often Organisational assessments are taken within an overall plan to develop a data strategy
 
 ```{r, include = FALSE}
 ben_org_dat <- org_dat %>%
@@ -1807,7 +1807,7 @@ htmlwidgets::saveWidget(widget = ben_NFP_plot, file = "plots/ben_NFP_plot.html")
 webshot(url = "plots/ben_NFP_plot.html", file = "plots/ben_NFP_plot.png", delay = 1, zoom = 4, vheight = 650)
 ```
 
-It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except it appears that more people shared their results with the organisation in 2020. Since the sample size is fairly small, we cannot make any firm conclusions. 
+It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except it appears that more people shared the results with their organisation in 2020. Since the sample size is fairly small, we cannot make any firm conclusions. 
 
 ```{r making-action-plot, include = FALSE}
 # make data frame 
