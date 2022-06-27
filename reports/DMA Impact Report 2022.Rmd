@@ -131,7 +131,7 @@ In this report we look at the results from this year's Impact Analysis. We also 
 
 ### What we did
 
-We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisation version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
+We invited 707 users of our Data Maturity Assessment Tool to complete a user feedback survey, targeting those who had taken an assessment between November 2020 and March 2022. We invited users of the free Individual version of our tool and the project lead at each organisation that had undertaken an assessment using the paid-for Organisational version. The free Individual version of the tool is an online assessment that anyone can take for free. The data maturity score is based on that individuals responses. The Organisational version is an online assessment where multiple people within an organisation take the assessment, and the results are compiled into an organisational report. See the appendix for more detail about the different versions of Data Orchard's Data Maturity Assessment Tool.
 
 We asked about users' experience of taking a data maturity assessment and any benefits they experienced or actions they took as a result of taking an assessment. We received 70 complete responses in total.
 
@@ -201,19 +201,21 @@ We repeated the same online survey used in [our previous Impact Evaluation.](htt
 
 -   actions they took as a result of using the Data Maturity Assessment Tool
 
-We also asked if they had implemented a data strategy, and any achievements they gained from doing so. We then asked if they had applied for, or secured, resources to implement improvements.
+-   if they had implemented a data strategy, and any achievements they gained from doing so
+
+-   whether they had applied for, or secured, resources to implement improvements
 
 ### Profile of Respondents
 
-We asked respondents in what capacity they took the data maturity assessment. The breakdown is shown in Figure 2.
+We asked respondents in what capacity they took the data maturity assessment. Fifty seven respondents said they took it *'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)'*, seven of these were users of the Organisational version of the tool. Five took it *'For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)'* and no respondents selected *'For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker) '*. Eight specified *'Other'*, which included researching and testing the tool or deciding if they wanted to use it. 
 
 ```{r, include = FALSE}
 # make figure legend column
 
 dem.dat <- dat22 %>%
-  mutate(demo = case_when(orgs == "1" ~ "Paid-for organisational version",
+  mutate(demo = case_when(orgs == "1" ~ "Paid-for Organisational version",
                           Empty == "1" ~ "Didn’t answer past first question",
-                          is.na(orgs) & is.na(Empty) ~ "Free individual version")
+                          is.na(orgs) & is.na(Empty) ~ "Free Individual version")
          ) %>%
   select(`Capacity`, `demo`) %>%
   group_by(`Capacity`, `demo`) %>%
@@ -227,8 +229,8 @@ n_dem <- sum(dem.dat$n)
 
 
 p <- ggplot(dem.dat, aes(fill = factor(demo, levels = c("Didn’t answer past first question",
-                                                   "Paid-for organisational version",
-                                                   "Free individual version"
+                                                   "Paid-for Organisational version",
+                                                   "Free Individual version"
                                                    )), 
                  y = n, 
                  x = factor(`Capacity`,
@@ -256,7 +258,7 @@ p <- ggplot(dem.dat, aes(fill = factor(demo, levels = c("Didn’t answer past fi
   #scale_fill_discrete(breaks = c("Free users", "Organisational DMA", "Didn’t answer past first question")) +
   scale_fill_manual(values = c("#64A6A7", "#9CCB44", "#808285"), 
                     guide = guide_legend(reverse = TRUE),
-                    breaks =c("Free individual version", "Paid-for organisational version", "Didn’t answer past first question")) +
+                    breaks =c("Free Individual version", "Paid-for Organisational version", "Didn’t answer past first question")) +
    coord_flip() +
   geom_text(aes(label = n),
             size = 3
@@ -291,11 +293,11 @@ dem_plot <- ggplotly(p, tooltip = 'text') %>%
   config(displayModeBar = FALSE)
 ```
 
-```{r eval=knitr::is_html_output(), echo=FALSE, fig.alt="Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the individual version, 7 paid-for organisational version users. For client organisations in the not-for-profit sector: 5 free individual version users. 7 other users of the free individual version.", fig.cap='Figure 2: Number of people completing impact survey by user type', fig.height=5, warning=FALSE, out.width='100%'}
+```{r eval=knitr::is_html_output(), echo=FALSE, fig.alt="Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the Individual version, 7 paid-for Organisational version users. For client organisations in the not-for-profit sector: 5 free Individual version users. 7 other users of the free Individual version.", fig.cap='Figure 2: Number of people completing impact survey by user type', fig.height=5, warning=FALSE, out.width='100%'}
 dem_plot
 ```
 
-```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5.5, fig.cap = 'Figure 2: Number of people completing impact survey by user type', fig.alt = "Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the individual version, 7 paid-for organisational version users. For client organisations in the not-for-profit sector: 5 free individual version users. 7 other users of the free individual version.  "}
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5.5, fig.cap = 'Figure 2: Number of people completing impact survey by user type', fig.alt = "Stacked bar chart with 3 bars. For the not-for-profit organisation I work for: 50 free users of the Individual version, 7 paid-for Organisational version users. For client organisations in the not-for-profit sector: 5 free Individual version users. 7 other users of the free Individual version.  "}
 htmlwidgets::saveWidget(widget = dem_plot, file = "plots/dem_plot.html")
 webshot(url = "plots/dem_plot.html", file = "plots/dem_plot.png", delay = 1, zoom = 4, vheight = 500)
 ```
@@ -486,7 +488,7 @@ htmlwidgets::saveWidget(widget = benchmark_plot, file = "plots/benchmark_plot.ht
 webshot(url = "plots/benchmark_plot.html", file = "plots/benchmark_plot.png", delay = 1, zoom = 4, vheight = 500)
 ```
 
-### Expectation vs Reality
+### Expectation vs reality
 
 Most users from not-for-profit organisations expected their organisation to be either *average* or *worse than average* (76.7%). People generally aren't taking the assessment because they think they are doing better than others. We see this again when only 4% of not-for-profit users of the free Individual version cite *'thought we might be doing quite well compared to others and wanted to check'* as a motivation for taking the assessment (see Motivation section). Most organisations compared to others in a way the user expected (62.5%).
 
@@ -507,7 +509,7 @@ comp <- dat22 %>%
   
 ```
 
-## Likelihood to Recommend
+## Likelihood to recommend
 
 Of 70 people who answered this question, 68% are likely or very likely to recommend Data Orchard's Data Maturity Assessment Tool. Only 2% are unlikely to do so.
 
@@ -604,7 +606,7 @@ We asked those who would recommend the tool to give some details about how they 
 Those who were unlikely to recommend the tool expressed a difficulty in understanding where the scores had come from and how they were calculated. It's worth noting that we do provide an explanation of how the scores are calculated [here.](https://www.dataorchard.org.uk/more-about-the-dma-tool/#scoring) However better signposting to this information may be helpful, especially for one-off individual users of the tool.    
 
 
-## Free Individual Version - Not-for-profit users
+## Free Individual version - not-for-profit users
 
 ```{r, include = FALSE}
 # make NFP free users dataframe
@@ -701,7 +703,7 @@ webshot(url = "plots/job_plot.html", file = "plots/job_plot.png", delay = 1, zoo
 
 ### Motivations
 
-For users of our free individual version of the tool, the most common motivation for taking the assessment was *to learn more about data maturity*. The next biggest motivation was *wanting to get better with data but not knowing where to start*. *Testing its suitability for colleagues to complete in order to help people in the organisation think/talk about data* was also a popular answer. Other reasons included *being asked to do it by a colleague* and *wanting to check how well the organisation is doing*. 
+For users of our free Individual version of the tool, the most common motivation for taking the assessment was *to learn more about data maturity*. The next biggest motivation was *wanting to get better with data but not knowing where to start*. *Testing its suitability for colleagues to complete in order to help people in the organisation think/talk about data* was also a popular answer. Other reasons included *being asked to do it by a colleague* and *wanting to check how well the organisation is doing*. 
 
 ```{r, include = FALSE}
 # make dataframe
@@ -772,11 +774,11 @@ mot_NFP_fr22_plot <- ggplotly(p, tooltip = 'text') %>%
   
 ```
 
-```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%. "}
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 8, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free Individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%. "}
 mot_NFP_fr22_plot
 ```
 
-```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 9, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%."}
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 9, fig.cap = 'Figure 7: Motivations for taking the data maturity assessment for free Individual version users',  fig.alt = "Horizontal bar chart showing what not-for-profit free users selected as their motivations for taking a data maturity assessment (tick all that apply). 50 respondents. To learn more about data maturity = 62%,  thought our organisation might need to get better with data but didn't know where to start = 46%,  to test its suitability for colleagues to complete to help people in the organisation think/talk about data = 38%,  felt data was not 'working' for our organisation's cause = 32%,  couldn't unlock the value of data for decision making = 32%, frustrated with poor and/or outdated data systems and tools = 20%, struggled to engage senior leaders in driving improvements around data = 20%, sensed we weren't doing so well compared to other organisations in our sector = 18%, thought we might be doing quite well compared to other organisations and wanted to check = 8%, other = 16%."}
 htmlwidgets::saveWidget(widget = mot_NFP_fr22_plot, file = "plots/mot_NFP_fr22_plot.html")
 webshot(url = "plots/mot_NFP_fr22_plot.html", file = "plots/mot_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 800)
 ```
@@ -785,7 +787,7 @@ webshot(url = "plots/mot_NFP_fr22_plot.html", file = "plots/mot_NFP_fr22_plot.pn
 
 #### Benefits
 
-The most common benefit cited by users of the free individual version was *to gain an objective reflection of where the organisation is at* (around 80% experience this moderately or extensively). *Increased motivations and raised aspirations within the organisation* were also frequently chosen answers, along with *improved understanding about important factors and questions*. 
+The most common benefit cited by users of the free Individual version was *to gain an objective reflection of where the organisation is at* (around 80% experience this moderately or extensively). *Increased motivations and raised aspirations within the organisation* were also frequently chosen answers, along with *improved understanding about important factors and questions*. 
 
 ```{r making-NFP-free-benefits-plot, include = FALSE}
 # make dataframe
@@ -873,11 +875,11 @@ ben_NFP_fr22_plot <-  ggplotly(p, tooltip = 'text') %>%
 
 ```
 
-```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%. "}
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free Individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%. "}
 ben_NFP_fr22_plot
 ```
 
-```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%."}
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6, out.width='100%', fig.cap = 'Figure 8: Benefits of taking a data maturity assessment for free Individual version users',fig.alt = "Stacked bar chart showed how not-for-profit free users rated receiving the following benefits. 50 respondents. Provided an objective reflection of where my organisation was at: extensively = 38%, moderately = 44%, a little = 14%, not at all = 4%. Improved my understanding about important factors and questions: extensively = 22%, moderately = 50%, a little = 20%, not at all = 8%. Increased motivation to improve my organisation's data maturity: extensively = 26%, moderately = 42%, a little = 26%, not at all = 6%. Raised my aspirations for what's possible in my organisation: extensively = 28%, moderately = 36%, a little = 28%, not at all = 8%. Reassured me that my organisation is on the right track: extensively = 10%, moderately = 42%, a little = 40%, not at all = 8%. Identified clear priorities to focus on: extensively = 16%, moderately = 36%, a little = 36%, not at all = 12%. Highlighted different perceptions about data across my organisation: extensively = 18%, moderately = 34%, a little = 26%, not at all = 20%, not answered = 2%."}
 htmlwidgets::saveWidget(widget = ben_NFP_fr22_plot, file = "plots/ben_NFP_fr22_plot.html")
 webshot(url = "plots/ben_NFP_fr22_plot.html", file = "plots/ben_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 620)
 ```
@@ -966,11 +968,11 @@ top_3_actions <- (top_3_actions/n_act_NFP_fr22)*100
 
 ```
 
-```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 7, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, fig.height = 7, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free Individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
 act_NFP_fr22_plot
 ```
 
-```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6.5, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, fig.height = 6.5, out.width='100%', fig.cap = 'Figure 9: Actions taken by users of the free Individual version following the data maturity assessment', fig.alt = "Horizontal bar chart showing actions taken by not-for-profit free users (tick all that apply). 50 respondents. Discussed with colleagues where change and improvement was needed = 52%, used the assessment results internally to guide plans for developing data strategy/maturity = 44%, shared your results report with other people in the organisation = 40%, invited colleagues to also take the assessment = 30%, secured leadership support for change and improvement = 18%, sought external expert advice/consultancy to help with data strategy/maturity = 10%, sought funding/resources from internal budgets to implement improvements = 10%, applied for external funding to implement improvements = 2%, none of the above = 16%."}
 htmlwidgets::saveWidget(widget = act_NFP_fr22_plot, file = "plots/act_NFP_fr22_plot.html")
 webshot(url = "plots/act_NFP_fr22_plot.html", file = "plots/act_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 750)
 ```
@@ -1086,9 +1088,9 @@ htmlwidgets::saveWidget(widget = ach_NFP_fr22_plot, file = "plots/ach_NFP_fr22_p
 webshot(url = "plots/ach_NFP_fr22_plot.html", file = "plots/ach_NFP_fr22_plot.png", delay = 1, zoom = 4, vheight = 700)
 ```
 
-All achievements, apart from increased income, had relatively similar ratings from respondents. *Increased knowledge and expertise* was the top benefit stated. *Increased collaboration and sharing with partners/stakeholders* and *improved strategic planning and decision making* were also important.
+All achievements, apart from *Increased income*, had relatively similar ratings from respondents, with most people experiencing them at least a little. *Increased knowledge and expertise* was the top benefit stated. *Increased collaboration and sharing with partners/stakeholders* and *Improved strategic planning and decision making* were also important, along with *Improved services and/or products* and *Strengthened partnerships/networks*.
 
-## Paid-for Organisational Version - Not-for-profit users
+## Paid-for Organisational version - not-for-profit users
 
 ```{r, include = FALSE}
 # make orgs dataframe
@@ -1169,7 +1171,7 @@ webshot(url = "plots/mot_org_plot.html", file = "plots/mot_org_plot.png", delay 
 
 #### Benefits
 
-Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version have experienced more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
+Similar to free users, the top benefits were *increased motivation* and *raised aspirations within the organisation*, as well as *highlighting different perceptions*. Importantly, users of the Organisational version report experiencing more extensive benefits than the users of the free Individual version. Although there are several reasons this could be, such as:
 
 -   They are more invested in data maturity (taken the time and invested resources to do an organisational assessment)
 
@@ -1434,7 +1436,7 @@ ach_org_plot <-  ggplotly(p, tooltip = 'text') %>%
 
 ```
 
-## Support Providers Analysis
+## Support providers analysis
 
 ```{r, include = FALSE}
 # make data support providers dataframe
@@ -1443,7 +1445,7 @@ SP <- dat22 %>%
 
 ```
 
-Support providers are organisations that support non-profits to assess and improve their data maturity. They may be consultants or infrastructure organisations. Five respondents selected this description for themselves.
+Support providers are organisations that support non-profits to assess and improve their data maturity. They may be consultants or infrastructure organisations. Five respondents selected this description for themselves by saying they took the assessment *'For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)'*.
 
 ### Motivations
 
@@ -1559,7 +1561,7 @@ Three support providers responded to our question about actions taken after the 
 
 ## Conclusion
 
-### Users of the Free Individual Version
+### Users of the free Individual version
 
 Overall, these results support our theory of change. Most users of the free Individual version of the tool were able to gain an objective reflection of where they are at and engaged in discussions with colleagues after taking the assessment. We see this as an important first step to improving data maturity.
 
@@ -1571,7 +1573,7 @@ Although only a few sought funding (internally or externally), it is of note tha
 
 42% of respondents went on to implement a data strategy, although not many achievements were made 'extensively' from this. It could be that it is too soon to see long-term achievements. Of the 50 not-for-profit users of the free tool who responded to our survey, 34 (60%) took a data maturity assessment for the first time less than six months before the impact survey. Additionally, it could be that there are other achievements of a data strategy that our theory of change does not address. Or that the strategies people are implementing are not that effective. Our assumption is that it’s still too early to see the impacts of data strategy implementations, so watch this space. 
 
-### Paid-for Organisational Version Users
+### Users of the paid-for Organisational version
 
 Many of the patterns we see in users of the Organisational version of the of the Data Maturity Assessment Tool are similar to that of users of the free Individual version. There is a high motivation to learn about data maturity and the most common actions are sharing results and discussing data maturity with colleagues.
 
@@ -1579,11 +1581,11 @@ Importantly, most users of Organisational version experienced all the benefits w
 
 The fact that no respondents said they took *no action* after taking the assessment is support for the impact of our tool as a driver of change. Around 40% implemented a data strategy plan with limited achievements (as mentioned previously, this is possibly because there has not been sufficient time to see the fruits of their data strategy implementations).
 
-### Support Providers
+### Support providers
 
 It is difficult to make any strong conclusions from these results, as not many support providers completed the survey. For those who did respond, it seems as though the tool supports them by providing reassurance and reinforcing what good practice looks like. Some qualitative data about how this fed into the support they were providing would help us to understand this area better.
 
-# Results: Comparison to 2020 Impact Results
+# Results: comparison to 2020 impact results
 
 ```{r, include = FALSE}
 dat <- bind_rows(dat21, dat22)
@@ -1805,7 +1807,7 @@ htmlwidgets::saveWidget(widget = ben_NFP_plot, file = "plots/ben_NFP_plot.html")
 webshot(url = "plots/ben_NFP_plot.html", file = "plots/ben_NFP_plot.png", delay = 1, zoom = 4, vheight = 650)
 ```
 
-It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except more people shared their results with the organisation in 2020.
+It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except it appears that more people shared their results with the organisation in 2020. Since the sample size is fairly small, we cannot make any firm conclusions. 
 
 ```{r making-action-plot, include = FALSE}
 # make data frame 
@@ -1906,7 +1908,7 @@ Finally, we compared the results from the survey to our last impact survey, cond
 
 # Appendix
 
-## Data Maturity Framework
+## Data maturity framework
 
 Data maturity is the journey an organisation takes to becoming better at using data. Our framework outlines seven key themes to data maturity along a five-stage journey. The seven themes are: Uses, Data, Analysis, Leadership, Culture, Tools and Skills. The five stages are Unaware, Emerging, Learning, Developing and Mastering. An organisation can score at any of the five stages for each of the seven themes. [Read our full data maturity framework here.](https://www.dataorchard.org.uk/resources/data-maturity-framework)
 
@@ -1924,7 +1926,7 @@ We have designed a self-assessment tool that organisations can use to evaluate h
 
 -   Cohort - Multiple organisations can use this version to take the assessment at the same time. Ideal for data consultants, support providers, networks, & membership organisations wanting to advance organisations' data maturity collectively.
 
-## Theory of Change
+## Theory of change
 
 Our theory of change outlines how we expect the Data Maturity Assessment Tool to have an impact in the short and long term. The theory of change targets specific people and identifies specific problems.
 
@@ -1960,9 +1962,9 @@ We expect these people to be experiencing problems with:
 
 #### Outcomes
 
-By taking a data maturity assessment, we predict immediate benefits that bring about tangible actions. These actions lead to results that increase data maturity and provide long-term rewards and benefits.
+Outcomes are changes in attitudes, behaviour, skills and knowledge. By taking a data maturity assessment, we predict immediate benefits that bring about tangible actions. These actions lead to results that increase data maturity and provide long-term rewards and benefits.
 
-##### Immediate Outcomes
+##### Immediate outcomes
 
 -   Advancing knowledge
     -   Improved understanding about important factors and questions in organisational data maturity
@@ -1989,7 +1991,7 @@ By taking a data maturity assessment, we predict immediate benefits that bring a
 
 -   Develop a data strategy/improvement plan
 
-##### Intermediate Outcomes
+##### Intermediate outcomes
 
 -   Secure funding or resources
 
@@ -1997,7 +1999,7 @@ By taking a data maturity assessment, we predict immediate benefits that bring a
 
 -   Implement their data strategy/improvement plans
 
-##### Long-term Outcomes
+##### Long-term outcomes
 
 -   Improved strategic planning and decision making
 
