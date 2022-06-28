@@ -26,6 +26,9 @@ header-includes:
 - \usepackage{arev}
 - \usepackage[T1]{fontenc}
 output:
+  word_document:
+    toc: yes
+    toc_depth: 3
   html_document:
     toc: yes
     toc_float: true
@@ -36,9 +39,6 @@ output:
     df_print: paged
     includes:
       before_body: before.html
-  word_document:
-    toc: yes
-    toc_depth: 3
   pdf_document:
     fig_caption: yes
     keep_tex: no 
@@ -125,9 +125,9 @@ colour_scheme <- c("#B11E33", "#EE7623","#64A6A7","#F04E4B","#9CCB44","#EF6C6C",
 
 # Executive Summary
 
-The results of Data Orchard's 2022 Impact Analysis of the Data Maturity Assessment Tool were similar to the 2020 findings: The tool is regularly used for learning about data maturity, and taking an assessment is often a catalyst for discussion with colleagues which can lead to further action. 
+The results of Data Orchard's 2022 Impact Analysis of the Data Maturity Assessment Tool were similar to the 2020 findings: The tool is regularly used for learning about data maturity, and taking an assessment is often a catalyst for discussion with colleagues which can lead to further action.
 
-In this report we look at the results from this year's Impact Analysis. We also compare this year's results to the 2020 findings and reflect on what this means. 
+In this report we look at the results from this year's Impact Analysis. We also compare this year's results to the 2020 findings and reflect on what this means.
 
 ### What we did
 
@@ -141,15 +141,13 @@ We asked about users' experience of taking a data maturity assessment and any be
 
 -   Taking a data maturity assessment prompts sharing and discussions about data within organisations
 
--   Efforts to secure financial resources to implement improvements following a data maturity assessment are almost always successful
+-   When people, following a data maturity assessment, try to secure financial resources to implement improvements they are almost always successful (both Individual and Organisational users)
 
--   Around 40% of organisations go on to implement a data strategy after taking an assessment
+-   Around 40% of organisations go on to implement a data strategy after taking an assessment (both Individual and Organisational users)
 
 -   Overall findings are similar to our previous impact survey results from 2020
 
 -   Organisational Data Maturity Assessments appear to have more extensive benefits than Individual Data Maturity Assessments
-
-
 
 # Introduction
 
@@ -187,7 +185,7 @@ knitr::kable(responses,
 
 The overall response rate is 9.9%. The response rate is higher for users of the paid-for Organisational version (33.3%) than users of the free Individual version (9.2%). This response rate is lower than for our previous 2020 impact survey (which was 20% overall).
 
-Respondents who skipped a whole question were excluded from analysis for that question. However, if they partially answered a question they were included with *'unanswered'* under the section they did not complete. 
+Respondents who skipped a whole question were excluded from analysis for that question. However, if they partially answered a question they were included with *'unanswered'* under the section they did not complete.
 
 ### What did we ask them?
 
@@ -207,7 +205,7 @@ We repeated the same online survey used in [our previous Impact Evaluation.](htt
 
 ### Profile of Respondents
 
-We asked respondents in what capacity they took the data maturity assessment. Fifty seven respondents said they took it *'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)'*, seven of these were users of the Organisational version of the tool. Five took it *'For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)'* and no respondents selected *'For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker) '*. Eight specified *'Other'*, which included researching and testing the tool or deciding if they wanted to use it. 
+We asked respondents in what capacity they took the data maturity assessment. Fifty seven respondents said they took it *'For the not-for-profit organisation I work for (e.g. charity, social enterprise, coop, university, public sector organisation)'*, seven of these were users of the Organisational version of the tool. Five took it *'For client organisation/s in the not-for-profit sector (e.g. consultant, data support provider, product/service company)'* and no respondents selected *'For a network/membership/cohort of not-for-profit organisations (e.g. membership/infrastructure organisation, grant maker) '*. Eight specified *'Other'*, which included researching and testing the tool, or deciding if they wanted to use it.
 
 ```{r, include = FALSE}
 # make figure legend column
@@ -306,7 +304,7 @@ webshot(url = "plots/dem_plot.html", file = "plots/dem_plot.png", delay = 1, zoo
 
 ## Usefulness
 
-All but 2 respondents said they found the tool at least *'somewhat useful'*. 67% of all respondents said they found the Data Maturity Assessment Tool *very* or *extremely useful*. No one said they found the Data Maturity Assessment Tool *not at all useful*. Of the two respondents who found the tool not so useful:
+All but two respondents said they found the tool at least *'somewhat useful'*. 67% of all respondents said they found the Data Maturity Assessment Tool *very* or *extremely useful*. No one said they found the Data Maturity Assessment Tool *not at all useful*. Of the two respondents who found the tool not so useful:
 
 -   one said that they needed more support to fill it out and lack of engagement from leaders led to no action
 
@@ -390,11 +388,11 @@ usefulness_plot <- ggplotly(p, tooltip = 'text') %>%
                         font = list(size = 20)))
 ```
 
-```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4.5, fig.cap = 'Figure 3: How useful respondents found the data maturity assessment by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
+```{r eval=knitr::is_html_output(), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 4.5, fig.cap = 'Figure 3: How useful respondents found the Data Maturity Assessment Tool by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
 usefulness_plot
 ```
 
-```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5, fig.cap = 'Figure 3: How useful respondents found the data maturity assessment by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
+```{r eval=knitr::pandoc_to("docx"), echo = FALSE, warning = FALSE, out.width='100%', fig.height = 5, fig.cap = 'Figure 3: How useful respondents found the Data Maturity Assessment Tool by user type', fig.alt = "Stacked bar chart showing usefulness rating by user type. For the not-for-profit organisation I work for: total = 57. Extremely useful = 26%, very useful = 37%, somewhat useful = 33%, not so useful = 4%. Support providers: total = 5. Extremely useful = 20%, Very useful = 40%, somewhat useful = 40%. Other: total = 8. Extremely useful = 38%, very useful = 62%."}
 htmlwidgets::saveWidget(widget = usefulness_plot, file = "plots/usefulness_plot.html")
 webshot(url = "plots/usefulness_plot.html", file = "plots/usefulness_plot.png", delay = 1, zoom = 4, vheight = 500)
 ```
@@ -603,8 +601,7 @@ We asked those who would recommend the tool to give some details about how they 
 
 </center>
 
-Those who were unlikely to recommend the tool expressed a difficulty in understanding where the scores had come from and how they were calculated. It's worth noting that we do provide an explanation of how the scores are calculated [here.](https://www.dataorchard.org.uk/more-about-the-dma-tool/#scoring) However better signposting to this information may be helpful, especially for one-off individual users of the tool.    
-
+Those who were unlikely to recommend the tool expressed a difficulty in understanding where the scores had come from and how they were calculated. It's worth noting that we do provide an explanation of how the scores are calculated [here.](https://www.dataorchard.org.uk/more-about-the-dma-tool/#scoring) However better signposting to this information may be helpful, especially for one-off Individual users of the tool.
 
 ## Free Individual version - not-for-profit users
 
@@ -622,7 +619,7 @@ how_comp <- NFP_fr22 %>%
   summarise(n = n())
 ```
 
-This section focuses on analysis of the 50 respondents who used the free Individual version of the Data Maturity Assessment Tool for the not-for-profit organisation they work for. Most not-for-profit users of the free tool completed the assessment individually (60%). 26% of users completed it as one of a number of individuals from the same organisation taking the assessment. 14% completed it in a group setting.
+This section focuses on analysis of the 50 respondents who used the free Individual version of the Data Maturity Assessment Tool for the not-for-profit organisation they work for. Most not-for-profit users of the free Individual version completed the assessment individually (60%). 26% of users completed it as one of a number of individuals from the same organisation taking the assessment. 14% completed it in a group setting.
 
 Respondents were asked to indicate the nature of their interest in data maturity by selecting from a list. The largest group were Data Champions (36%). There was also a good proportion of Leaders (19%) and Data Strategists (17%). 21% indicated 'other' and provided a range of responses including Data Strategists, an ICT coordinator, and managers of various kinds (Data & Performance, Evaluation & Impact, research leader).
 
@@ -703,7 +700,7 @@ webshot(url = "plots/job_plot.html", file = "plots/job_plot.png", delay = 1, zoo
 
 ### Motivations
 
-For users of our free Individual version of the tool, the most common motivation for taking the assessment was *to learn more about data maturity*. The next biggest motivation was *wanting to get better with data but not knowing where to start*. *Testing its suitability for colleagues to complete in order to help people in the organisation think/talk about data* was also a popular answer. Other reasons included *being asked to do it by a colleague* and *wanting to check how well the organisation is doing*. 
+For users of our free Individual version of the tool, the most common motivation for taking the assessment was *to learn more about data maturity*. The next biggest motivation was *wanting to get better with data but not knowing where to start*. *Testing its suitability for colleagues to complete in order to help people in the organisation think/talk about data* was also a popular answer. Other reasons included *being asked to do it by a colleague* and *wanting to check how well the organisation is doing*.
 
 ```{r, include = FALSE}
 # make dataframe
@@ -787,7 +784,7 @@ webshot(url = "plots/mot_NFP_fr22_plot.html", file = "plots/mot_NFP_fr22_plot.pn
 
 #### Benefits
 
-The most common benefit cited by users of the free Individual version was *to gain an objective reflection of where the organisation is at* (around 80% experience this moderately or extensively). *Increased motivations and raised aspirations within the organisation* were also frequently chosen answers, along with *improved understanding about important factors and questions*. 
+The most common benefit cited by users of the free Individual version was *to gain an objective reflection of where the organisation is at* (around 80% experience this moderately or extensively). *Increased motivations and raised aspirations within the organisation* were also frequently chosen answers, along with *improved understanding about important factors and questions*.
 
 ```{r making-NFP-free-benefits-plot, include = FALSE}
 # make dataframe
@@ -886,7 +883,7 @@ webshot(url = "plots/ben_NFP_fr22_plot.html", file = "plots/ben_NFP_fr22_plot.pn
 
 #### Actions
 
-The most common action was *discussing changes with colleagues*, followed by *using the results to guide plans* and *sharing results with others in the organisation*. 74% of respondents chose at least one of these three options. 16% didn't do any of the actions we proposed. 
+The most common action was *discussing changes with colleagues*, followed by *using the results to guide plans* and *sharing results with others in the organisation*. 74% of respondents chose at least one of these three options. 16% didn't do any of the actions we proposed.
 
 ```{r making-NFP-free-actions-plot, include = FALSE}
 act_NFP_fr22 <- NFP_fr22 %>%
@@ -987,7 +984,7 @@ Five users (10%) sought internal funding/resources, all five were successful in 
 
 #### Impact
 
-21 of the 52 respondents (42%) said they had implemented a data strategy/improvement plan since completing the assessment. These plans resulted in the following achievements:
+We asked respondents if they had implemented a data strategy/improvement plan since completing the assessment. 21 of the 52 respondents (42%) said they had. These plans resulted in the following achievements:
 
 ```{r NFP-free-strategy-data, include = FALSE}
 NFP_fr22_strategy <- NFP_fr22 %>%
@@ -1104,7 +1101,7 @@ We thought it would be interesting to look at those who undertook a paid-for Org
 
 Similar to users of the free Individual version of the tool, Organisational version users were motivated by wanting *to learn more about data maturity* and *not knowing where to start*. They weren't as impacted by *sensing as though they were doing worse than peers* or *struggling to engage leadership*. Possibly because, in some cases, a data lead may have to secure a level of support in order to commission an Organisational assessment.
 
-People who chose '*other*' mainly specified *wanting a baseline or benchmark within their organisation* and *to check their progress*. 
+People who chose '*other*' mainly specified *wanting a baseline or benchmark within their organisation* and *to check their progress*.
 
 ```{r, include = FALSE}
 mot_org <- org_dat %>%
@@ -1265,7 +1262,7 @@ webshot(url = "plots/ben_org_dat_plot.html", file = "plots/ben_org_dat_plot.png"
 
 #### Actions
 
-All Organisational version users who answered this question *shared the results within their organisation*. Six of seven users (86%) went on to *discuss changes with colleagues*, *secure leadership support* and *use them to guide plans for a data strategy*. No-one took *no action*. 
+All Organisational version users who answered this question *shared the results within their organisation*. Six of seven users (86%) went on to *discuss changes with colleagues*, *secure leadership support* and *use them to guide plans for a data strategy*. No-one took *no action*.
 
 ```{r, include = FALSE}
 
@@ -1348,7 +1345,7 @@ Three organisations sought funding/resources from internal budgets, all were suc
 
 #### Impact
 
-Of seven respondents, two implemented a data strategy/plan after the assessment. As a result of this plan, there were limited achievements, with all achievements rated as being experienced *'moderately'* or *'a little'*. Improved strategic planning, improved services, efficiency savings and improved impact where achieved *moderately* by both organisations. 
+We asked respondents if they had implemented a data strategy/improvement plan since completing the assessment. Of seven respondents, two said they had. As a result of this plan, there were limited achievements, with all achievements rated as being experienced *'moderately'* or *'a little'*. Improved strategic planning, improved services, efficiency savings and improved impact where achieved *moderately* by both organisations.
 
 It typically takes some months to devise a data strategy and secure the resources for implementation. Following implementation of a strategy, it then takes even more time to create the change needed to deliver impact. It is therefore not surprising that at this stage (i.e. within 0-17 months of taking an assessment) the long-term impacts are yet to be seen.
 
@@ -1453,7 +1450,7 @@ Five support providers responded to the question about their motivations for com
 
 -   Two were motivated by *testing its suitability for the client to use* and *to help clients work out where to start improving*
 
--   One person was motivated by each of: *learning more about data maturity*, *engaging senior leaders,* *demonstrating sector comparison*, *diagnosing how they're doing,* and *completing the assessment on behalf of their organisation* 
+-   One person was motivated by each of: *learning more about data maturity*, *engaging senior leaders,* *demonstrating sector comparison*, *diagnosing how they're doing,* and *completing the assessment on behalf of their organisation*
 
 -   None were motivated a by *gaining a baseline to check impact of support*
 
@@ -1571,7 +1568,7 @@ Although it is promising to see that using our assessment tool leads to positive
 
 Although only a few sought funding (internally or externally), it is of note that almost all of them were successful. This indicates that it is possible that the Data Maturity Assessment Tool could be a useful aid in securing funds. Our theory of change predicts that these funds (which were spent on training, new tools, new jobs) could lead to long-term rewards and benefits. For example, *increased knowledge and expertise*, *better decision making*, *better services and products*.
 
-42% of respondents went on to implement a data strategy, although not many achievements were made 'extensively' from this. It could be that it is too soon to see long-term achievements. Of the 50 not-for-profit users of the free tool who responded to our survey, 34 (60%) took a data maturity assessment for the first time less than six months before the impact survey. Additionally, it could be that there are other achievements of a data strategy that our theory of change does not address. Or that the strategies people are implementing are not that effective. Our assumption is that it’s still too early to see the impacts of data strategy implementations, so watch this space. 
+42% of respondents went on to implement a data strategy, although not many achievements were made 'extensively' from this. It could be that it is too soon to see long-term achievements. Of the 50 not-for-profit users of the free tool who responded to our survey, 34 (60%) took a data maturity assessment for the first time less than six months before the impact survey. Additionally, it could be that there are other achievements of a data strategy that our theory of change does not address. Or that the strategies people are implementing are not that effective. Our assumption is that it's still too early to see the impacts of data strategy implementations, so watch this space.
 
 ### Users of the paid-for Organisational version
 
@@ -1807,7 +1804,7 @@ htmlwidgets::saveWidget(widget = ben_NFP_plot, file = "plots/ben_NFP_plot.html")
 webshot(url = "plots/ben_NFP_plot.html", file = "plots/ben_NFP_plot.png", delay = 1, zoom = 4, vheight = 650)
 ```
 
-It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except it appears that more people shared the results with their organisation in 2020. Since the sample size is fairly small, we cannot make any firm conclusions. 
+It seems that a higher proportion of people reported taking actions after completing the assessment in 2020, compared to 2022. The trend of which actions were taken most is the same, except it appears that more people shared the results with their organisation in 2020. Since the sample size is fairly small, we cannot make any firm conclusions.
 
 ```{r making-action-plot, include = FALSE}
 # make data frame 
@@ -1898,7 +1895,7 @@ As there were only five support providers who responded to our survey this year,
 
 In this report we present findings from our 2022 Data Maturity Assessment Impact Evaluation Survey. The survey aims to test our theory of change for the Data Maturity Assessment Tool.
 
-The results found were largely what we expected, based on our theory of change. Most users from not-for-profit organisations were highly motivated to take an assessment by wanting to learn more about data maturity and not knowing where to start with getting better with data. The most extensive benefits were increased aspiration and motivation for improving data maturity, providing an objective reflection of where the organisation is at, and highlighting different perceptions about data across the organisation. This is true for users of both the free Individual version and paid-for Organisational version of our tool. Benefits observed by users of the Organisational version were notably more extensive than for users of the free Individual version (although this sample size is small). 
+The results found were largely what we expected, based on our theory of change. Most users from not-for-profit organisations were highly motivated to take an assessment by wanting to learn more about data maturity and not knowing where to start with getting better with data. The most extensive benefits were increased aspiration and motivation for improving data maturity, providing an objective reflection of where the organisation is at, and highlighting different perceptions about data across the organisation. This is true for users of both the free Individual version and paid-for Organisational version of our tool. Benefits observed by users of the Organisational version were notably more extensive than for users of the free Individual version (although this sample size is small).
 
 The most common actions following a data maturity assessment were sharing the results and discussing improvements with colleagues. Additionally, a large portion of users of the Organisational version were able to secure leadership support. Around 40% of not-for-profit organisations implemented a data strategy plan following a data maturity assessment. We suspect it is too soon to witness the long-term benefits as a result of this plan.
 
