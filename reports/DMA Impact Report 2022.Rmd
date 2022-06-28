@@ -26,9 +26,6 @@ header-includes:
 - \usepackage{arev}
 - \usepackage[T1]{fontenc}
 output:
-  word_document:
-    toc: yes
-    toc_depth: 3
   html_document:
     toc: yes
     toc_float: true
@@ -39,6 +36,9 @@ output:
     df_print: paged
     includes:
       before_body: before.html
+  word_document:
+    toc: yes
+    toc_depth: 3
   pdf_document:
     fig_caption: yes
     keep_tex: no 
@@ -1879,7 +1879,7 @@ The top motivation for taking an assessment was to learn more (62% of respondent
 
 Although it is promising to see that using our assessment tool leads to positive action for most people, it would be useful to know why - for 16% of people - it doesn't. If these people are simply wanting to learn about data maturity, then committing no further actions is not surprising. However, in order for our tool to have long-term implications in the not-for-profit sector we need it to lead to positive changes and action.
 
-Although only a few sought funding (internally or externally), it is of note that almost all of them were successful. This indicates that it is possible that the Data Maturity Assessment Tool could be a useful aid in securing funds. Our theory of change predicts that these funds (which were invested in training, new tools and jobs) could lead to long-term rewards and benefits. For example, *'increased knowledge and expertise'*, *'better decision making'*, *'better services and product's*.
+Although only a few sought funding (internally or externally), it is of note that almost all of them were successful. This indicates that it is possible that the Data Maturity Assessment Tool could be a useful aid in securing funds. Our theory of change predicts that these funds (which were invested in training, new tools and jobs) could lead to long-term rewards and benefits. For example, *'increased knowledge and expertise'*, *'better decision making'*, *'better services and product's'*.
 
 42% of respondents went on to implement a data strategy, although not many achievements were made *'extensively'* from this. It could be that it is too soon to see long-term achievements. Of the 50 not-for-profit users of the free tool who responded to our survey, 34 (60%) took a data maturity assessment for the first time less than six months before the impact survey. Additionally, it could be that there are other achievements of a data strategy that our theory of change does not address. Or that the strategies people are implementing are not that effective. Our assumption is that it's still too early to see the impacts of data strategy implementations, so watch this space.
 
