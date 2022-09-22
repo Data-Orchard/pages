@@ -56,7 +56,7 @@ schools.clearLayers(); // Add the schools items to the Schools overlay
           if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
             var lon = parseFloat(RegExp.$1);
             var lat = parseFloat(RegExp.$2);
-            var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
+            var html =`<h3> ${x.placeLabel.value} </h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/${lat}/${lon}${linktext1OSM}${x.place.value}${linktext2OSM}`
             if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
              //Do not add the point to the layer
 } else {
@@ -81,7 +81,9 @@ function generatetransportMarkers(){
               if (x.location.value.match(/^Point\((.+) (.+)\)$/)) {
                 var lon = parseFloat(RegExp.$1);
                 var lat = parseFloat(RegExp.$2);
-                var html = "<h3>"+x.placeLabel.value+"</h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/" + lat + "/" + lon + "\">Gweld ar OpenStreetMap</a><br /><a href=\"" + x.place.value + "\"> Gweld ar Wikidata </a></span>"  ;
+                
+                var html =`<h3> ${x.placeLabel.value} </h3><span class='link_format'> <a href=\"https://www.openstreetmap.org/#map=16/${lat}/${lon}${linktext1OSM}${x.place.value}${linktext2OSM}`
+                
                 if (x.placeLabel.value.match(/^Q[0-9]+$/)) {
                  //Do not add the point to the layer
     } else {
