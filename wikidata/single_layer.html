@@ -40,7 +40,7 @@
         // initialize the map
         var map = L.map('map').setView([52.2110,-3.8123], 12)
         
-        // load a tile layer
+        // load the OSM.CY tile layer
 
         var basemap_0 = L.tileLayer('https://openstreetmap.cymru/osm_tiles/{z}/{x}/{y}.png',
           {
@@ -50,6 +50,15 @@
           })
           basemap_0.addTo(map);
 
+
+               // load the OSM.ORG tile layer
+          var basemap_1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          {
+            attribution: 'Tiles by <a href="https://openstreetmap.cymru">(c) OSM Contributors</a>, Data by <a href="https://wikidata.org">Wikidata</a>',
+            maxZoom: 18,
+            minZoom: 9
+          })
+          basemap_1.addTo(map);
           
 // Declare variables
 var sparql_2; // Holds the relevant query
@@ -191,14 +200,19 @@ var lakesmk = L.icon({
 
 // CREATE THE OVERLAY LAYERS
 
-// First schools
 var schools = L.layerGroup() // it's a schools overlay
 var transport = L.layerGroup() // it's a transport overlay
-var lang_select = "cy"
-var linktext1OSM = "\">Gweld ar OpenStreetMap</a><br /><a href=\""
-var linktext2OSM = "\"> Gweld ar Wikidata </a></span>"
+var medical = L.layerGroup() // it's a Medical overlay
+var toilets = L.layerGroup() // it's a toliets overlay
+var GLAM = L.layerGroup() // it's a GLAM overlay
+
+// These set default values for some variables
+var lang_select = "cy" //This means Cymraeg. It can be switched to en for English
+var linktext1OSM = "\">Gweld ar OpenStreetMap</a><br /><a href=\"" //This is text that can create hotlinks
+var linktext2OSM = "\"> Gweld ar Wikidata </a></span>" //This is text that can create hotlinks
 
 // ADD a language button
+// The button toggles between two states for language selection
 var stateChangingButton = L.easyButton({
     states: [{
         stateName: 'English',
@@ -208,10 +222,22 @@ var stateChangingButton = L.easyButton({
              //   map.setView([42.3748204,-71.1161913],16);
                 btn.state('Cymraeg');
                 lang_select = "en";
-                linktext1OSM = "\">Edit on OpenStreetMap</a><br /><a href=\""
-                linktext2OSM = "\"> Edit on Wikidata </a></span>"
-
-
+                linktext1OSM = "\">Edit on OpenStreetMap</a><br /><a href=\"";
+                linktext2OSM = "\"> Edit on Wikidata </a></span>";
+                search_control.removeFrom(map);
+                    search_control = new L.Control.Search({
+		            url: `https://nominatim.openstreetmap.org/search?format=json&q={s}&accept-language=en,cy`,
+		            jsonpParam: 'json_callback',
+		            propertyName: 'display_name',
+		            propertyLoc: ['lat','lon'],
+		            marker: L.circleMarker([0,0],{radius:30}),
+		            autoCollapse: true,
+		            autoType: false,
+		            zoom: 14,	
+                    textPlaceholder: "Search",
+                    minLength: 2
+	                });
+                search_control.addTo(map)
             }
         }, {
             stateName: 'Cymraeg',        // name the state
@@ -221,8 +247,22 @@ var stateChangingButton = L.easyButton({
                // map.setView([46.25,-121.8],10);
                 btn.state('English');  
                 lang_select = "cy";  // change state on click!
-                linktext1OSM = "\">Gweld ar OpenStreetMap</a><br /><a href=\""
-                linktext2OSM = "\"> Gweld ar Wikidata </a></span>"
+                linktext1OSM = "\">Gweld ar OpenStreetMap</a><br /><a href=\"";
+                linktext2OSM = "\"> Gweld ar Wikidata </a></span>";
+                search_control.removeFrom(map);
+                search_control = new L.Control.Search({
+		            url: `https://nominatim.openstreetmap.org/search?format=json&q={s}&accept-language=cy,en`,
+		            jsonpParam: 'json_callback',
+		            propertyName: 'display_name',
+		            propertyLoc: ['lat','lon'],
+		            marker: L.circleMarker([0,0],{radius:30}),
+		            autoCollapse: true,
+		            autoType: false,
+		            zoom: 14,	
+                    textPlaceholder: "Chwilio...",
+                    minLength: 2
+	                });
+                search_control.addTo(map)
             }
     }]
 });
@@ -230,26 +270,35 @@ var stateChangingButton = L.easyButton({
 stateChangingButton.addTo(map);
 
 // ADD A CONTROL BUTTON
+// This button executes the search for all layers.
 
 L.easyButton('fa-refresh fa-4x', function(){
 generateSparqlQuery("schools"); // Get the Schools query
-generateschoolsMarkers(); // Generate the school markers for the current map bounds
-generateSparqlQuery("transport"); // Get the transport query
-generatetransportMarkers() // Generate the school markers for the current map bounds
+generateMarkers(schools, schoolsmk); // Generate the school markers for the current map bounds
+generateSparqlQuery("transport");
+generateMarkers(transport, transportmk); // Get the transport query
+generateSparqlQuery("medical"); // Get the toilet query
+generateMarkers(medical, medicalmk); // Get the medical query
+generateSparqlQuery("toilets"); // Get the toilet query
+generateMarkers(toilets, toiletsmk) // Generate the school markers for the current map bounds
+
+
 }).addTo(map);
 
-
+// Add the baselayers to the legend
     var baseLayers = {
     "Cymraeg": basemap_0,
+    "English": basemap_1,
 
 };
 
+//add the overlays to the legend
 var overlays = {
    "Ysgol - Schools": schools,
   "Trafnidiaeth - Transport": transport,
- /*  "Meddygol": medical,
-   "Toiledau": toilets,
-   "Diwylliant": GLAM,
+ "Meddygol - Medical": medical,
+ "Toiledau - Toliets": toilets
+  /* "Diwylliant": GLAM,
    "Safleoedd Hanesyddol": historic,
    "Safleoedd Cynhanesyddol": prehistoric,
    "Bryniau a Mynyddoedd": hills,
@@ -259,14 +308,14 @@ var overlays = {
    "Enwau Lleoedd Safonol Cymru": officialnames
 */
 };
+
+// Make the mao
 var hash = new L.Hash(map);
 
 L.control.layers(baseLayers, overlays, {collapsed:false}).addTo(map);
 
-
-	
-	map.addControl( new L.Control.Search({
-		url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&accept-language=cy,en',
+var search_control = new L.Control.Search({
+		url: `https://nominatim.openstreetmap.org/search?format=json&q={s}&accept-language=$cy,en`,
 		jsonpParam: 'json_callback',
 		propertyName: 'display_name',
 		propertyLoc: ['lat','lon'],
@@ -274,12 +323,12 @@ L.control.layers(baseLayers, overlays, {collapsed:false}).addTo(map);
 		autoCollapse: true,
 		autoType: false,
 		zoom: 14,	
-    textPlaceholder: 'Chwilio...',
+    textPlaceholder: "Chwilio...",
     minLength: 2
     
-	}) );
-
-
+	})
+    
+    search_control.addTo(map)
 
 
 
